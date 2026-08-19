@@ -157,7 +157,6 @@ const params =
     window.location.search
   );
 
-
 const upsId =
   params.get("id") || "UPS1";
 
@@ -194,7 +193,7 @@ var troubleshootingURL = "";
 
 
 // ==========================================
-// READ DOCUMENTATION
+// READ FIREBASE DOCUMENTATION
 // ==========================================
 
 var documentationRef =
@@ -206,15 +205,14 @@ var documentationRef =
 documentationRef.once("value")
   .then(function(snapshot) {
 
-    var data =
-      snapshot.val();
+    var data = snapshot.val();
 
+    console.log("Documentation data:", data);
 
     if (data) {
 
       manualURL =
         data.Manual || "";
-
 
       troubleshootingURL =
         data.Troubleshooting || "";
@@ -249,7 +247,7 @@ function openManual() {
   else {
 
     alert(
-      "User Manual is not available."
+      "User Manual is not available in Firebase."
     );
 
   }
@@ -273,7 +271,7 @@ function openTroubleshooting() {
   else {
 
     alert(
-      "Troubleshooting guide is not available."
+      "Troubleshooting Guide is not available in Firebase."
     );
 
   }
