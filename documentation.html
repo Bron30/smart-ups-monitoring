@@ -99,7 +99,9 @@
 <div class="container">
 
 
-  <!-- USER MANUAL -->
+  <!-- =========================
+       USER MANUAL
+       ========================= -->
 
   <div class="card"
        onclick="openManual()">
@@ -113,7 +115,9 @@
   </div>
 
 
-  <!-- TROUBLESHOOTING -->
+  <!-- =========================
+       TROUBLESHOOTING
+       ========================= -->
 
   <div class="card"
        onclick="openTroubleshooting()">
@@ -130,19 +134,16 @@
 </div>
 
 
+<!-- =========================
+     BACK BUTTON
+     ========================= -->
+
 <button class="back-button"
         onclick="goBack()">
 
   ⬅ Back
 
 </button>
-
-
-<!-- Firebase -->
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 
 <script>
@@ -161,96 +162,20 @@ const upsId =
   params.get("id") || "UPS1";
 
 
+// Display UPS ID
+
 document.getElementById("title").innerText =
   "📚 " + upsId + " Documentation";
 
 
 // ==========================================
-// FIREBASE CONFIGURATION
-// ==========================================
-
-var firebaseConfig = {
-
-  apiKey:
-    "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
-
-  databaseURL:
-    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
-
-};
-
-
-firebase.initializeApp(firebaseConfig);
-
-
-// ==========================================
-// DOCUMENTATION VARIABLES
-// ==========================================
-
-var manualURL = "";
-
-var troubleshootingURL = "";
-
-
-// ==========================================
-// READ FIREBASE DOCUMENTATION
-// ==========================================
-
-var documentationRef =
-  firebase.database().ref(
-    upsId + "/Documentation"
-  );
-
-
-documentationRef.once("value")
-  .then(function(snapshot) {
-
-    var data = snapshot.val();
-
-    console.log("Documentation data:", data);
-
-    if (data) {
-
-      manualURL =
-        data.Manual || "";
-
-      troubleshootingURL =
-        data.Troubleshooting || "";
-
-    }
-
-  })
-
-  .catch(function(error) {
-
-    console.error(
-      "Firebase error:",
-      error
-    );
-
-  });
-
-
-// ==========================================
-// OPEN MANUAL
+// OPEN USER MANUAL
 // ==========================================
 
 function openManual() {
 
-  if (manualURL) {
-
-    window.location.href =
-      manualURL;
-
-  }
-
-  else {
-
-    alert(
-      "User Manual is not available in Firebase."
-    );
-
-  }
+  window.location.href =
+    "manual.html";
 
 }
 
@@ -261,26 +186,14 @@ function openManual() {
 
 function openTroubleshooting() {
 
-  if (troubleshootingURL) {
-
-    window.location.href =
-      troubleshootingURL;
-
-  }
-
-  else {
-
-    alert(
-      "Troubleshooting Guide is not available in Firebase."
-    );
-
-  }
+  window.location.href =
+    "troubleshooting.html";
 
 }
 
 
 // ==========================================
-// BACK
+// BACK BUTTON
 // ==========================================
 
 function goBack() {
