@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Smart UPS Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+    }
+
+    header {
+      background: #020617;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+    }
+
+    .live {
+      color: #22c55e;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .value {
+      font-size: 30px;
+      margin-top: 10px;
+    }
+
+    .status {
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .healthy {
+      background: #16a34a;
+    }
+
+    .warning {
+      background: #facc15;
+      color: black;
+    }
+
+    .fault {
+      background: #dc2626;
+    }
+
+    button {
+      margin: 20px;
+      padding: 10px 20px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+
+<body>
+
+<header id="title">
+  UPS Dashboard
+  <br>
+  <span class="live">● LIVE</span>
+</header>
+
+
+<!-- =========================
+     LIVE UPS PARAMETERS
+     ========================= -->
+
+<div class="container">
+
+  <div class="card">
+    <h3>Battery Percentage</h3>
+    <div id="battery" class="value">--</div>
+  </div>
+
+  <div class="card">
+    <h3>Battery Voltage</h3>
+    <div id="voltage" class="value">--</div>
+  </div>
+
+  <div class="card">
+    <h3>Load Current</h3>
+    <div id="current" class="value">--</div>
+  </div>
+
+  <div class="card">
+    <h3>Temperature</h3>
+    <div id="temp" class="value">--</div>
+  </div>
+
+  <div class="card">
+    <h3>Vibration</h3>
+    <div id="vibration" class="value">--</div>
+  </div>
+
+  <div class="card">
+    <h3>UPS Status</h3>
+    <div id="status" class="status">--</div>
+  </div>
+
+</div>
+
+
+<center>
+  <button onclick="goBack()">⬅ Back</button>
+</center>
+
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+
+<script>
+
+  // =========================
+  // GET UPS ID
+  // =========================
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const upsId =
+    params.get("id") || "UPS1";
+
+
+  // Display UPS ID
+
+  document.getElementById("title").innerHTML =
+    upsId +
+    " Dashboard <br>" +
+    "<span class='live'>● LIVE</span>";
+
+
+  // =========================
+  // FIREBASE CONFIGURATION
+  // =========================
+
+  var firebaseConfig = {
+
+    apiKey:
+      "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+
+    databaseURL:
+      "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+
+  };
+
+
+  firebase.initializeApp(firebaseConfig);
+
+
+  // =========================
+  // FIREBASE REFERENCES
+  // =========================
+
+  var latestRef =
+    firebase.database().ref(
+      upsId + "/Latest"
+    );
+
+
+  // =========================
+  // LIVE UPS DATA
+  // =========================
+
+  latestRef.on("value", function(snapshot) {
+
+    var data = snapshot.val();
+
+    if (data) {
+
+      // Battery Percentage
+
+      document.getElementById("battery").innerText =
+        data.Battery_Percentage !== undefined
+          ? data.Battery_Percentage + " %"
+          : "--";
+
+
+      // Battery Voltage
+
+      document.getElementById("voltage").innerText =
+        data.Voltage !== undefined
+          ? data.Voltage
+          : "--";
+
+
+      // Load Current
+
+      document.getElementById("current").innerText =
+        data.Current !== undefined
+          ? data.Current
+          : "--";
+
+
+      // Temperature
+
+      document.getElementById("temp").innerText =
+        data.Temperature !== undefined
+          ? data.Temperature
+          : "--";
+
+
+      // Vibration
+
+      document.getElementById("vibration").innerText =
+        data.Vibration !== undefined
+          ? data.Vibration
+          : "--";
+
+
+      // UPS Status
+
+      let statusEl =
+        document.getElementById("status");
+
+
+      if (data.Status !== undefined) {
+
+        let status =
+          String(data.Status);
+
+
+        statusEl.innerText =
+          status.toUpperCase();
+
+
+        statusEl.className =
+          "status";
+
+
+        if (
+          status.toLowerCase() === "healthy"
+        ) {
+
+          statusEl.classList.add("healthy");
+
+        }
+
+        else if (
+          status.toLowerCase() === "warning"
+        ) {
+
+          statusEl.classList.add("warning");
+
+        }
+
+        else {
+
+          statusEl.classList.add("fault");
+
+        }
+
+      }
+
+    }
+
+  });
+
+
+  // =========================
+  // BACK BUTTON
+  // =========================
+
+  function goBack() {
+
+    window.location.href =
+      "index.html";
+
+  }
+
+</script>
+
+</body>
+</html>
