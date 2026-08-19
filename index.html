@@ -1,6 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
   <title>Smart UPS Dashboard</title>
 
@@ -61,6 +67,7 @@
     }
 
     /* Maintenance result */
+
     .maintenance-result {
       display: none;
       background: #1e293b;
@@ -81,61 +88,107 @@
 
 </head>
 
+
 <body>
+
 
 <h1>🔋 Smart UPS Dashboard</h1>
 
 
 <div class="container">
 
-  <!-- UPS CARD -->
 
-  <div class="card" onclick="openUPS('UPS1')">
+  <!-- =========================
+       UPS CARD
+       ========================= -->
 
-    <h3>UPS Unit 1</h3>
+  <div class="card"
+       onclick="openUPS('UPS1')">
 
-    <div id="status_ups1" class="status">
+    <h3>🔋 UPS Unit 1</h3>
+
+    <div id="status_ups1"
+         class="status">
+
       Loading...
+
     </div>
 
   </div>
 
 
-  <!-- MAINTENANCE CARD -->
+  <!-- =========================
+       MAINTENANCE CARD
+       ========================= -->
 
-  <div class="card" onclick="viewMaintenance('UPS1')">
+  <div class="card"
+       onclick="viewMaintenance('UPS1')">
 
     <h3>🔧 Maintenance</h3>
 
     <div class="status healthy">
+
       View Service Dates
+
     </div>
 
   </div>
 
+
+  <!-- =========================
+       DOCUMENTATION CARD
+       ========================= -->
+
+  <div class="card"
+       onclick="viewDocuments('UPS1')">
+
+    <h3>📚 Documentation</h3>
+
+    <div class="status healthy">
+
+      View Documents
+
+    </div>
+
+  </div>
+
+
 </div>
 
 
-<!--
-  This section is initially hidden.
-  Dates are NOT stored here.
-  They come from Firebase.
--->
+<!-- =========================
+     MAINTENANCE INFORMATION
+     ========================= -->
 
-<div id="maintenanceResult" class="maintenance-result">
+<div id="maintenanceResult"
+     class="maintenance-result">
 
   <h2>🔧 Maintenance</h2>
 
-  <p>
-    <strong>Last Service:</strong>
-    <br>
-    <span id="lastService">--</span>
-  </p>
 
   <p>
-    <strong>Next Service:</strong>
+
+    <strong>Last Service:</strong>
+
     <br>
-    <span id="nextService">--</span>
+
+    <span id="lastService">
+      --
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>Next Service:</strong>
+
+    <br>
+
+    <span id="nextService">
+      --
+    </span>
+
   </p>
 
 </div>
@@ -150,204 +203,219 @@
 
 <script>
 
-  // ==========================================
-  // FIREBASE CONFIGURATION
-  // ==========================================
 
-  var firebaseConfig = {
+// ==========================================
+// FIREBASE CONFIGURATION
+// ==========================================
 
-    apiKey:
-      "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+var firebaseConfig = {
 
-    databaseURL:
-      "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+  apiKey:
+    "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
 
-  };
+  databaseURL:
+    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
 
-
-  firebase.initializeApp(firebaseConfig);
+};
 
 
-  // ==========================================
-  // OPEN UPS DASHBOARD
-  // ==========================================
-
-  function openUPS(id) {
-
-    window.location.href =
-      "UPS.html?id=" + id;
-
-  }
+firebase.initializeApp(firebaseConfig);
 
 
-  // ==========================================
-  // UPS LIVE STATUS
-  // ==========================================
+// ==========================================
+// OPEN UPS DASHBOARD
+// ==========================================
 
-  function updateStatus(upsId, elementId) {
+function openUPS(id) {
 
-    var ref =
-      firebase.database().ref(
-        upsId + "/Latest"
-      );
+  window.location.href =
+    "UPS.html?id=" + id;
 
-
-    ref.on("value", function(snapshot) {
-
-      var data = snapshot.val();
-
-      var el =
-        document.getElementById(elementId);
+}
 
 
-      if (data && data.Status !== undefined) {
+// ==========================================
+// UPDATE UPS STATUS
+// ==========================================
 
-        var status =
-          String(data.Status);
+function updateStatus(upsId, elementId) {
 
-
-        el.innerText =
-          status.toUpperCase();
-
-
-        el.className =
-          "status";
+  var ref =
+    firebase.database().ref(
+      upsId + "/Latest"
+    );
 
 
-        if (
-          status.toLowerCase() === "healthy"
-        ) {
+  ref.on("value", function(snapshot) {
 
-          el.classList.add("healthy");
+    var data =
+      snapshot.val();
 
-        }
+    var el =
+      document.getElementById(elementId);
 
-        else if (
-          status.toLowerCase() === "warning"
-        ) {
 
-          el.classList.add("warning");
+    if (
+      data &&
+      data.Status !== undefined
+    ) {
 
-        }
+      var status =
+        String(data.Status);
 
-        else {
 
-          el.classList.add("fault");
+      el.innerText =
+        status.toUpperCase();
 
-        }
+
+      el.className =
+        "status";
+
+
+      if (
+        status.toLowerCase() ===
+        "healthy"
+      ) {
+
+        el.classList.add(
+          "healthy"
+        );
+
+      }
+
+      else if (
+        status.toLowerCase() ===
+        "warning"
+      ) {
+
+        el.classList.add(
+          "warning"
+        );
 
       }
 
       else {
 
-        el.innerText =
-          "NO DATA";
-
-        el.className =
-          "status fault";
+        el.classList.add(
+          "fault"
+        );
 
       }
 
-    });
+    }
 
-  }
+    else {
+
+      el.innerText =
+        "NO DATA";
+
+      el.className =
+        "status fault";
+
+    }
+
+  });
+
+}
 
 
-  // ==========================================
-  // VIEW MAINTENANCE
-  // ==========================================
+// ==========================================
+// VIEW MAINTENANCE
+// ==========================================
 
-  function viewMaintenance(upsId) {
+function viewMaintenance(upsId) {
 
-    /*
-      Get Maintenance data from Firebase.
+  var maintenanceRef =
+    firebase.database().ref(
+      upsId + "/Maintenance"
+    );
 
-      Nothing is hardcoded here.
-    */
 
-    var maintenanceRef =
-      firebase.database().ref(
-        upsId + "/Maintenance"
+  maintenanceRef.once("value")
+    .then(function(snapshot) {
+
+      var data =
+        snapshot.val();
+
+
+      document.getElementById(
+        "maintenanceResult"
+      ).style.display = "block";
+
+
+      if (data) {
+
+        document.getElementById(
+          "lastService"
+        ).innerText =
+          data.Last_Service !== undefined
+            ? data.Last_Service
+            : "Not available";
+
+
+        document.getElementById(
+          "nextService"
+        ).innerText =
+          data.Next_Service !== undefined
+            ? data.Next_Service
+            : "Not available";
+
+      }
+
+      else {
+
+        document.getElementById(
+          "lastService"
+        ).innerText =
+          "No data";
+
+
+        document.getElementById(
+          "nextService"
+        ).innerText =
+          "No data";
+
+      }
+
+    })
+
+    .catch(function(error) {
+
+      console.error(
+        "Firebase error:",
+        error
       );
 
+    });
 
-    maintenanceRef.once("value")
-      .then(function(snapshot) {
-
-        var data =
-          snapshot.val();
+}
 
 
-        if (data) {
+// ==========================================
+// VIEW DOCUMENTATION
+// ==========================================
 
-          /*
-            Get dates from Firebase backend
-          */
+function viewDocuments(upsId) {
 
-          document.getElementById("lastService").innerText =
-            data.Last_Service !== undefined
-              ? data.Last_Service
-              : "Not available";
+  window.location.href =
+    "documentation.html?id=" + upsId;
 
-
-          document.getElementById("nextService").innerText =
-            data.Next_Service !== undefined
-              ? data.Next_Service
-              : "Not available";
+}
 
 
-          /*
-            Show maintenance information
-          */
+// ==========================================
+// START UPS STATUS MONITORING
+// ==========================================
 
-          document.getElementById(
-            "maintenanceResult"
-          ).style.display = "block";
+updateStatus(
+  "UPS1",
+  "status_ups1"
+);
 
-        }
-
-        else {
-
-          document.getElementById(
-            "maintenanceResult"
-          ).style.display = "block";
-
-
-          document.getElementById(
-            "lastService"
-          ).innerText = "No data";
-
-
-          document.getElementById(
-            "nextService"
-          ).innerText = "No data";
-
-        }
-
-      })
-
-      .catch(function(error) {
-
-        console.error(
-          "Firebase error:",
-          error
-        );
-
-      });
-
-  }
-
-
-  // ==========================================
-  // START UPS STATUS MONITORING
-  // ==========================================
-
-  updateStatus(
-    "UPS1",
-    "status_ups1"
-  );
 
 </script>
 
+
 </body>
+
 </html>
