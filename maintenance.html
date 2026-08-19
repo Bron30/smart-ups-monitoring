@@ -10,72 +10,137 @@
 
   <title>UPS Maintenance</title>
 
+
   <style>
 
     body {
+
       font-family: Arial, sans-serif;
+
       background: #0f172a;
+
       color: white;
+
       text-align: center;
+
       margin: 0;
+
     }
+
 
     header {
+
       background: #020617;
+
       padding: 25px;
+
     }
+
 
     header h1 {
+
       margin: 0;
+
     }
+
+
+    header p {
+
+      color: #94a3b8;
+
+    }
+
 
     .container {
+
       display: flex;
+
       justify-content: center;
+
       gap: 25px;
+
       margin-top: 50px;
+
       flex-wrap: wrap;
+
     }
+
 
     .card {
+
       background: #1e293b;
+
       padding: 25px;
+
       border-radius: 12px;
+
       width: 260px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+
+      box-shadow:
+        0 4px 20px rgba(0,0,0,0.3);
+
     }
+
 
     .card h2 {
+
       margin-bottom: 15px;
+
     }
+
 
     .date {
+
       font-size: 24px;
+
       color: #38bdf8;
+
       margin-top: 10px;
+
+      font-weight: bold;
+
     }
+
 
     .loading {
+
       color: #facc15;
+
     }
+
 
     .error {
+
       color: #f87171;
+
     }
+
 
     button {
+
       margin-top: 40px;
+
       padding: 12px 25px;
+
       background: #2563eb;
+
       border: none;
+
       border-radius: 8px;
+
       color: white;
+
       font-size: 16px;
+
       cursor: pointer;
+
     }
 
+
     button:hover {
+
       background: #1d4ed8;
+
     }
 
   </style>
@@ -102,7 +167,9 @@
 <div class="container">
 
 
-  <!-- LAST SERVICE -->
+  <!-- =========================
+       LAST SERVICE
+       ========================= -->
 
   <div class="card">
 
@@ -118,7 +185,9 @@
   </div>
 
 
-  <!-- NEXT SERVICE -->
+  <!-- =========================
+       NEXT SERVICE
+       ========================= -->
 
   <div class="card">
 
@@ -138,13 +207,15 @@
 
 
 <button onclick="goBack()">
+
   ⬅ Back
+
 </button>
 
 
-<!-- ==========================================
+<!-- =========================
      FIREBASE
-     ========================================== -->
+     ========================= -->
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 
@@ -155,7 +226,7 @@
 
 
 // ==========================================
-// GET UPS ID FROM URL
+// GET UPS ID
 // ==========================================
 
 const params =
@@ -169,7 +240,7 @@ const upsId =
 
 
 // ==========================================
-// UPDATE PAGE TITLE
+// PAGE TITLE
 // ==========================================
 
 document.getElementById("title").innerText =
@@ -205,12 +276,13 @@ var maintenanceRef =
 
 
 // ==========================================
-// READ MAINTENANCE DATA
+// GET MAINTENANCE DATA
 // ==========================================
 
 maintenanceRef.once("value")
 
   .then(function(snapshot) {
+
 
     var data =
       snapshot.val();
@@ -229,7 +301,7 @@ maintenanceRef.once("value")
 
 
     // ======================================
-    // DATA EXISTS
+    // DATA FOUND
     // ======================================
 
     if (data) {
@@ -316,6 +388,7 @@ maintenanceRef.once("value")
 
   .catch(function(error) {
 
+
     console.error(
       "Firebase error:",
       error
@@ -325,19 +398,31 @@ maintenanceRef.once("value")
     document.getElementById(
       "lastService"
     ).innerText =
-      "Error";
+      "Firebase Error";
 
 
     document.getElementById(
       "nextService"
     ).innerText =
-      "Error";
+      "Firebase Error";
+
+
+    document.getElementById(
+      "lastService"
+    ).className =
+      "date error";
+
+
+    document.getElementById(
+      "nextService"
+    ).className =
+      "date error";
 
   });
 
 
 // ==========================================
-// BACK BUTTON
+// BACK TO INDEX
 // ==========================================
 
 function goBack() {
