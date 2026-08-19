@@ -99,7 +99,7 @@
 
 
   <!-- =========================
-       UPS CARD
+       UPS UNIT
        ========================= -->
 
   <div class="card"
@@ -118,7 +118,7 @@
 
 
   <!-- =========================
-       MAINTENANCE CARD
+       MAINTENANCE
        ========================= -->
 
   <div class="card"
@@ -136,7 +136,7 @@
 
 
   <!-- =========================
-       DOCUMENTATION CARD
+       DOCUMENTATION
        ========================= -->
 
   <div class="card"
@@ -194,7 +194,9 @@
 </div>
 
 
-<!-- Firebase -->
+<!-- =========================
+     FIREBASE
+     ========================= -->
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 
@@ -223,7 +225,7 @@ firebase.initializeApp(firebaseConfig);
 
 
 // ==========================================
-// OPEN UPS DASHBOARD
+// OPEN UPS
 // ==========================================
 
 function openUPS(id) {
@@ -277,9 +279,7 @@ function updateStatus(upsId, elementId) {
         "healthy"
       ) {
 
-        el.classList.add(
-          "healthy"
-        );
+        el.classList.add("healthy");
 
       }
 
@@ -288,17 +288,13 @@ function updateStatus(upsId, elementId) {
         "warning"
       ) {
 
-        el.classList.add(
-          "warning"
-        );
+        el.classList.add("warning");
 
       }
 
       else {
 
-        el.classList.add(
-          "fault"
-        );
+        el.classList.add("fault");
 
       }
 
@@ -404,7 +400,7 @@ function viewDocuments(upsId) {
 
 
 // ==========================================
-// START UPS STATUS MONITORING
+// START STATUS MONITORING
 // ==========================================
 
 updateStatus(
