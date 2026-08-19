@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>UPS Troubleshooting Guide</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #020617;
+      padding: 25px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .problem {
+      background: #1e293b;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .problem h2 {
+      color: #38bdf8;
+      margin-top: 0;
+    }
+
+    .cause {
+      background: #334155;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .solution {
+      background: #14532d;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .back-button {
+      text-align: center;
+      margin: 30px;
+    }
+
+    button {
+      padding: 12px 25px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th,
+    td {
+      border: 1px solid #475569;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #334155;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>🔧 UPS Troubleshooting Guide</h1>
+
+  <p>Smart DC UPS Monitoring System</p>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- QUICK REFERENCE -->
+
+  <div class="problem">
+
+    <h2>1. Quick Troubleshooting Reference</h2>
+
+    <table>
+
+      <tr>
+        <th>Problem</th>
+        <th>Possible Cause</th>
+        <th>Recommended Action</th>
+      </tr>
+
+      <tr>
+        <td>Dashboard shows no data</td>
+        <td>ESP32 or Wi-Fi connection problem</td>
+        <td>Check ESP32 power and Wi-Fi connection.</td>
+      </tr>
+
+      <tr>
+        <td>Battery voltage unavailable</td>
+        <td>Voltage sensor or wiring problem</td>
+        <td>Check voltage sensor connections.</td>
+      </tr>
+
+      <tr>
+        <td>Battery percentage abnormal</td>
+        <td>Incorrect voltage reading or battery condition</td>
+        <td>Check battery voltage and sensor connection.</td>
+      </tr>
+
+      <tr>
+        <td>Temperature is high</td>
+        <td>Excessive heating or insufficient ventilation</td>
+        <td>Check UPS ventilation and operating conditions.</td>
+      </tr>
+
+      <tr>
+        <td>Vibration detected</td>
+        <td>Mechanical movement or vibration near UPS</td>
+        <td>Check UPS mounting and surrounding equipment.</td>
+      </tr>
+
+      <tr>
+        <td>Current reading unavailable</td>
+        <td>Current sensor or connection problem</td>
+        <td>Check current sensor wiring.</td>
+      </tr>
+
+      <tr>
+        <td>UPS status shows FAULT</td>
+        <td>Abnormal operating condition</td>
+        <td>Check voltage, temperature, current and vibration readings.</td>
+      </tr>
+
+    </table>
+
+  </div>
+
+
+  <!-- PROBLEM 1 -->
+
+  <div class="problem">
+
+    <h2>2. Dashboard Shows No Data</h2>
+
+    <div class="cause">
+
+      <strong>Possible Causes:</strong>
+
+      <ul>
+
+        <li>ESP32 is not powered.</li>
+
+        <li>ESP32 is not connected to Wi-Fi.</li>
+
+        <li>Firebase connection is unavailable.</li>
+
+        <li>Sensor data is not being transmitted.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="solution">
+
+      <strong>Recommended Actions:</strong>
+
+      <ol>
+
+        <li>Check ESP32 power supply.</li>
+
+        <li>Check Wi-Fi availability.</li>
+
+        <li>Check ESP32 serial monitor.</li>
+
+        <li>Verify Firebase data.</li>
+
+        <li>Check sensor connections.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROBLEM 2 -->
+
+  <div class="problem">
+
+    <h2>3. Battery Voltage Not Displayed</h2>
+
+    <div class="cause">
+
+      <strong>Possible Causes:</strong>
+
+      <ul>
+
+        <li>Voltage sensor is disconnected.</li>
+
+        <li>Sensor wiring is incorrect.</li>
+
+        <li>ESP32 is not receiving the sensor value.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="solution">
+
+      <strong>Recommended Actions:</strong>
+
+      <ol>
+
+        <li>Check voltage sensor wiring.</li>
+
+        <li>Check the sensor output.</li>
+
+        <li>Verify the ESP32 input pin.</li>
+
+        <li>Check the value stored in Firebase.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROBLEM 3 -->
+
+  <div class="problem">
+
+    <h2>4. Battery Percentage Appears Incorrect</h2>
+
+    <div class="cause">
+
+      <strong>Possible Causes:</strong>
+
+      <ul>
+
+        <li>Incorrect battery voltage measurement.</li>
+
+        <li>Battery voltage-to-percentage mapping is inaccurate.</li>
+
+        <li>Battery condition has changed.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="solution">
+
+      <strong>Recommended Actions:</strong>
+
+      <ol>
+
+        <li>Verify the measured battery voltage.</li>
+
+        <li>Check the battery percentage calculation.</li>
+
+        <li>Compare the reading with a suitable multimeter measurement.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROBLEM 4 -->
+
+  <div class="problem">
+
+    <h2>5. Temperature Reading is High</h2>
+
+    <div class="cause">
+
+      <strong>Possible Causes:</strong>
+
+      <ul>
+
+        <li>UPS is operating under high load.</li>
+
+        <li>Insufficient ventilation.</li>
+
+        <li>Ambient temperature is high.</li>
+
+        <li>Temperature sensor is positioned incorrectly.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="solution">
+
+      <strong>Recommended Actions:</strong>
+
+      <ol>
+
+        <li>Check the UPS load.</li>
+
+        <li>Improve ventilation.</li>
+
+        <li>Check the temperature sensor position.</li>
+
+        <li>Allow the system to cool before further operation if necessary.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROBLEM 5 -->
+
+  <div class="problem">
+
+    <h2>6. Vibration Detected</h2>
+
+    <div class="cause">
+
+      <strong>Possible Causes:</strong>
+
+      <ul>
+
+        <li>UPS enclosure is moving.</li>
+
+        <li>External mechanical vibration is present.</li>
+
+        <li>SW-420 vibration sensor is too sensitive.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="solution">
+
+      <strong>Recommended Actions:</strong>
+
+      <ol>
+
+        <li>Check the UPS mounting.</li>
+
+        <li>Check nearby mechanical equipment.</li>
+
+        <li>Verify the SW-420 sensor mounting.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROBLEM 6 -->
+
+  <div class="problem">
+
+    <h2>7. UPS Status Shows FAULT</h2>
+
+    <div class="cause">
+
+      <strong>Possible Causes:</strong>
+
+      <ul>
+
+        <li>Battery voltage is outside the expected range.</li>
+
+        <li>Temperature is too high.</li>
+
+        <li>Abnormal current is detected.</li>
+
+        <li>Vibration condition is abnormal.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="solution">
+
+      <strong>Recommended Actions:</strong>
+
+      <ol>
+
+        <li>Check battery voltage.</li>
+
+        <li>Check temperature.</li>
+
+        <li>Check load current.</li>
+
+        <li>Check vibration condition.</li>
+
+        <li>Inspect the UPS if the fault persists.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- SAFETY -->
+
+  <div class="problem">
+
+    <h2>8. Safety Precautions</h2>
+
+    <ul>
+
+      <li>
+        Do not short-circuit the battery terminals.
+      </li>
+
+      <li>
+        Do not exceed the rated UPS load.
+      </li>
+
+      <li>
+        Disconnect power before modifying hardware connections.
+      </li>
+
+      <li>
+        Keep the UPS away from water and excessive heat.
+      </li>
+
+      <li>
+        If an electrical fault is suspected, stop operation
+        and inspect the system safely.
+      </li>
+
+    </ul>
+
+  </div>
+
+
+</div>
+
+
+<div class="back-button">
+
+  <button onclick="goBack()">
+    ⬅ Back to UPS Dashboard
+  </button>
+
+</div>
+
+
+<script>
+
+  function goBack() {
+
+    window.history.back();
+
+  }
+
+</script>
+
+
+</body>
+
+</html>
