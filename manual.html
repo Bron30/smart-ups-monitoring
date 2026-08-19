@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>UPS User Manual</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #020617;
+      padding: 25px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .section {
+      background: #1e293b;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .section h2 {
+      color: #38bdf8;
+      margin-top: 0;
+    }
+
+    .info {
+      background: #334155;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    .back-button {
+      text-align: center;
+      margin: 30px;
+    }
+
+    button {
+      padding: 12px 25px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>📖 Smart DC UPS User Manual</h1>
+
+  <p>QR-Enabled Smart UPS Monitoring System</p>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- SYSTEM OVERVIEW -->
+
+  <div class="section">
+
+    <h2>1. System Overview</h2>
+
+    <p>
+      The Smart DC UPS Monitoring System is designed to
+      monitor the operational condition of a DC UPS and
+      provide real-time information through an IoT-based
+      monitoring system.
+    </p>
+
+    <div class="info">
+
+      <strong>Monitoring Parameters:</strong>
+
+      <ul>
+
+        <li>Battery Voltage</li>
+
+        <li>Battery Percentage</li>
+
+        <li>Temperature</li>
+
+        <li>Load Current</li>
+
+        <li>Vibration</li>
+
+        <li>UPS Status</li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+
+  <!-- SYSTEM OPERATION -->
+
+  <div class="section">
+
+    <h2>2. System Operation</h2>
+
+    <p>
+      The DC UPS supplies power to the connected DC load.
+      The ESP32-based monitoring unit collects UPS operating
+      parameters and sends the information to the Firebase
+      Realtime Database through Wi-Fi.
+    </p>
+
+    <div class="info">
+
+      <strong>Basic workflow:</strong>
+
+      <p>
+        DC UPS → Sensors → ESP32 → Wi-Fi →
+        Firebase → Web Dashboard
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- DASHBOARD -->
+
+  <div class="section">
+
+    <h2>3. Monitoring Dashboard</h2>
+
+    <p>
+      The dashboard provides real-time information about
+      the UPS operating condition.
+    </p>
+
+    <ul>
+
+      <li>
+        <strong>Battery Percentage:</strong>
+        Displays the estimated battery charge level.
+      </li>
+
+      <li>
+        <strong>Battery Voltage:</strong>
+        Displays the measured battery voltage.
+      </li>
+
+      <li>
+        <strong>Load Current:</strong>
+        Displays the measured load current.
+      </li>
+
+      <li>
+        <strong>Temperature:</strong>
+        Displays the measured temperature.
+      </li>
+
+      <li>
+        <strong>Vibration:</strong>
+        Displays the detected vibration condition.
+      </li>
+
+      <li>
+        <strong>UPS Status:</strong>
+        Displays the overall UPS condition.
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- QR CODE -->
+
+  <div class="section">
+
+    <h2>4. QR Code Access</h2>
+
+    <p>
+      A QR code attached to the UPS provides quick access
+      to the digital UPS monitoring and maintenance portal.
+    </p>
+
+    <div class="info">
+
+      <strong>Procedure:</strong>
+
+      <ol>
+
+        <li>Open the camera or QR scanner on your smartphone.</li>
+
+        <li>Scan the QR code attached to the UPS.</li>
+
+        <li>Open the displayed web link.</li>
+
+        <li>Access the UPS monitoring dashboard.</li>
+
+        <li>View maintenance and documentation information.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <!-- MAINTENANCE -->
+
+  <div class="section">
+
+    <h2>5. Maintenance</h2>
+
+    <p>
+      The digital maintenance section provides access to
+      service information associated with the UPS.
+    </p>
+
+    <ul>
+
+      <li>Last Service Date</li>
+
+      <li>Next Service Date</li>
+
+    </ul>
+
+    <p>
+      Service information is retrieved from the cloud
+      database associated with the UPS.
+    </p>
+
+  </div>
+
+
+  <!-- BASIC SAFETY -->
+
+  <div class="section">
+
+    <h2>6. Basic Precautions</h2>
+
+    <ul>
+
+      <li>
+        Ensure that the UPS connections are properly secured.
+      </li>
+
+      <li>
+        Do not short-circuit the battery terminals.
+      </li>
+
+      <li>
+        Keep the UPS and battery away from excessive heat
+        and moisture.
+      </li>
+
+      <li>
+        Do not exceed the rated load of the UPS.
+      </li>
+
+      <li>
+        Disconnect power before performing hardware
+        modifications or maintenance.
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- TROUBLESHOOTING -->
+
+  <div class="section">
+
+    <h2>7. Troubleshooting</h2>
+
+    <p>
+      For common UPS monitoring problems and possible
+      corrective actions, open the dedicated
+      Troubleshooting Guide.
+    </p>
+
+  </div>
+
+
+</div>
+
+
+<div class="back-button">
+
+  <button onclick="goBack()">
+    ⬅ Back to UPS Dashboard
+  </button>
+
+</div>
+
+
+<script>
+
+  function goBack() {
+
+    window.history.back();
+
+  }
+
+</script>
+
+
+</body>
+
+</html>
