@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>UPS Documentation</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      margin: 0;
+    }
+
+    header {
+      background: #020617;
+      padding: 25px;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 12px;
+      width: 230px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background: #334155;
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #2563eb;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .back-button {
+      margin-top: 40px;
+      padding: 10px 20px;
+      background: #475569;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-button:hover {
+      background: #64748b;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1 id="title">
+    📚 UPS Documentation
+  </h1>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- USER MANUAL -->
+
+  <div class="card"
+       onclick="openManual()">
+
+    <h2>📖 User Manual</h2>
+
+    <div class="button">
+      Open Manual
+    </div>
+
+  </div>
+
+
+  <!-- TROUBLESHOOTING -->
+
+  <div class="card"
+       onclick="openTroubleshooting()">
+
+    <h2>🔧 Troubleshooting</h2>
+
+    <div class="button">
+      Open Guide
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<button class="back-button"
+        onclick="goBack()">
+
+  ⬅ Back
+
+</button>
+
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+
+<script>
+
+
+// ==========================================
+// GET UPS ID
+// ==========================================
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const upsId =
+  params.get("id") || "UPS1";
+
+
+document.getElementById("title").innerText =
+  "📚 " + upsId + " Documentation";
+
+
+// ==========================================
+// FIREBASE CONFIGURATION
+// ==========================================
+
+var firebaseConfig = {
+
+  apiKey:
+    "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+
+  databaseURL:
+    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+
+};
+
+
+firebase.initializeApp(firebaseConfig);
+
+
+// ==========================================
+// DOCUMENTATION VARIABLES
+// ==========================================
+
+var manualURL = "";
+
+var troubleshootingURL = "";
+
+
+// ==========================================
+// READ DOCUMENTATION
+// ==========================================
+
+var documentationRef =
+  firebase.database().ref(
+    upsId + "/Documentation"
+  );
+
+
+documentationRef.once("value")
+  .then(function(snapshot) {
+
+    var data =
+      snapshot.val();
+
+
+    if (data) {
+
+      manualURL =
+        data.Manual || "";
+
+
+      troubleshootingURL =
+        data.Troubleshooting || "";
+
+    }
+
+  })
+
+  .catch(function(error) {
+
+    console.error(
+      "Firebase error:",
+      error
+    );
+
+  });
+
+
+// ==========================================
+// OPEN MANUAL
+// ==========================================
+
+function openManual() {
+
+  if (manualURL) {
+
+    window.location.href =
+      manualURL;
+
+  }
+
+  else {
+
+    alert(
+      "User Manual is not available."
+    );
+
+  }
+
+}
+
+
+// ==========================================
+// OPEN TROUBLESHOOTING
+// ==========================================
+
+function openTroubleshooting() {
+
+  if (troubleshootingURL) {
+
+    window.location.href =
+      troubleshootingURL;
+
+  }
+
+  else {
+
+    alert(
+      "Troubleshooting guide is not available."
+    );
+
+  }
+
+}
+
+
+// ==========================================
+// BACK
+// ==========================================
+
+function goBack() {
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
