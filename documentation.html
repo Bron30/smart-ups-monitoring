@@ -134,9 +134,7 @@
 </div>
 
 
-<!-- =========================
-     BACK BUTTON
-     ========================= -->
+<!-- BACK BUTTON -->
 
 <button class="back-button"
         onclick="goBack()">
@@ -158,11 +156,14 @@ const params =
     window.location.search
   );
 
+
 const upsId =
   params.get("id") || "UPS1";
 
 
-// Display UPS ID
+// ==========================================
+// DISPLAY UPS ID
+// ==========================================
 
 document.getElementById("title").innerText =
   "📚 " + upsId + " Documentation";
@@ -175,7 +176,7 @@ document.getElementById("title").innerText =
 function openManual() {
 
   window.location.href =
-    "manual.html";
+    "manual.html?id=" + upsId;
 
 }
 
@@ -187,7 +188,7 @@ function openManual() {
 function openTroubleshooting() {
 
   window.location.href =
-    "troubleshooting.html";
+    "troubleshooting.html?id=" + upsId;
 
 }
 
