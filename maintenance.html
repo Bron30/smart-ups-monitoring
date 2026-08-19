@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>UPS Maintenance</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      margin: 0;
+    }
+
+    header {
+      background: #020617;
+      padding: 25px;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 12px;
+      width: 260px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .card h2 {
+      margin-bottom: 15px;
+    }
+
+    .date {
+      font-size: 24px;
+      color: #38bdf8;
+      margin-top: 10px;
+    }
+
+    .loading {
+      color: #facc15;
+    }
+
+    .error {
+      color: #f87171;
+    }
+
+    button {
+      margin-top: 40px;
+      padding: 12px 25px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1 id="title">
+    🔧 UPS Maintenance
+  </h1>
+
+  <p>
+    Service Information
+  </p>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- LAST SERVICE -->
+
+  <div class="card">
+
+    <h2>📅 Last Service</h2>
+
+    <div id="lastService"
+         class="date loading">
+
+      Loading...
+
+    </div>
+
+  </div>
+
+
+  <!-- NEXT SERVICE -->
+
+  <div class="card">
+
+    <h2>🔔 Next Service</h2>
+
+    <div id="nextService"
+         class="date loading">
+
+      Loading...
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<button onclick="goBack()">
+  ⬅ Back
+</button>
+
+
+<!-- ==========================================
+     FIREBASE
+     ========================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+
+<script>
+
+
+// ==========================================
+// GET UPS ID FROM URL
+// ==========================================
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const upsId =
+  params.get("id") || "UPS1";
+
+
+// ==========================================
+// UPDATE PAGE TITLE
+// ==========================================
+
+document.getElementById("title").innerText =
+  "🔧 " + upsId + " Maintenance";
+
+
+// ==========================================
+// FIREBASE CONFIGURATION
+// ==========================================
+
+var firebaseConfig = {
+
+  apiKey:
+    "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+
+  databaseURL:
+    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+
+};
+
+
+firebase.initializeApp(firebaseConfig);
+
+
+// ==========================================
+// FIREBASE MAINTENANCE REFERENCE
+// ==========================================
+
+var maintenanceRef =
+  firebase.database().ref(
+    upsId + "/Maintenance"
+  );
+
+
+// ==========================================
+// READ MAINTENANCE DATA
+// ==========================================
+
+maintenanceRef.once("value")
+
+  .then(function(snapshot) {
+
+    var data =
+      snapshot.val();
+
+
+    var lastService =
+      document.getElementById(
+        "lastService"
+      );
+
+
+    var nextService =
+      document.getElementById(
+        "nextService"
+      );
+
+
+    // ======================================
+    // DATA EXISTS
+    // ======================================
+
+    if (data) {
+
+
+      // LAST SERVICE
+
+      if (
+        data.Last_Service !== undefined
+      ) {
+
+        lastService.innerText =
+          data.Last_Service;
+
+        lastService.className =
+          "date";
+
+      }
+
+      else {
+
+        lastService.innerText =
+          "Not available";
+
+        lastService.className =
+          "date error";
+
+      }
+
+
+      // NEXT SERVICE
+
+      if (
+        data.Next_Service !== undefined
+      ) {
+
+        nextService.innerText =
+          data.Next_Service;
+
+        nextService.className =
+          "date";
+
+      }
+
+      else {
+
+        nextService.innerText =
+          "Not available";
+
+        nextService.className =
+          "date error";
+
+      }
+
+    }
+
+
+    // ======================================
+    // NO DATA
+    // ======================================
+
+    else {
+
+      lastService.innerText =
+        "No data";
+
+      nextService.innerText =
+        "No data";
+
+      lastService.className =
+        "date error";
+
+      nextService.className =
+        "date error";
+
+    }
+
+  })
+
+
+  // ========================================
+  // FIREBASE ERROR
+  // ========================================
+
+  .catch(function(error) {
+
+    console.error(
+      "Firebase error:",
+      error
+    );
+
+
+    document.getElementById(
+      "lastService"
+    ).innerText =
+      "Error";
+
+
+    document.getElementById(
+      "nextService"
+    ).innerText =
+      "Error";
+
+  });
+
+
+// ==========================================
+// BACK BUTTON
+// ==========================================
+
+function goBack() {
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
