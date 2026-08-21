@@ -36,66 +36,122 @@
       padding: 20px;
     }
 
-    .problem {
+    /* =========================
+       PROBLEM LIST
+       ========================= */
+
+    .problem-list {
       background: #1e293b;
-      margin-bottom: 20px;
       padding: 20px;
       border-radius: 12px;
+      margin-bottom: 25px;
     }
 
-    .problem h2 {
+    .problem-list h2 {
+      color: #38bdf8;
+      margin-top: 0;
+    }
+
+    .problem-button {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+
+      background: #334155;
+      color: white;
+
+      border: none;
+      border-radius: 8px;
+
+      padding: 15px;
+      margin: 10px 0;
+
+      text-align: left;
+      font-size: 16px;
+
+      cursor: pointer;
+
+      transition: 0.3s;
+    }
+
+    .problem-button:hover {
+      background: #475569;
+      transform: translateX(5px);
+    }
+
+    /* =========================
+       PROBLEM DETAILS
+       ========================= */
+
+    .problem-details {
+      display: none;
+
+      background: #1e293b;
+
+      padding: 25px;
+
+      border-radius: 12px;
+
+      margin-top: 20px;
+    }
+
+    .problem-details h2 {
       color: #38bdf8;
       margin-top: 0;
     }
 
     .cause {
       background: #334155;
-      padding: 15px;
+
+      padding: 18px;
+
       border-radius: 8px;
-      margin-top: 10px;
+
+      margin-top: 15px;
     }
 
     .solution {
       background: #14532d;
-      padding: 15px;
+
+      padding: 18px;
+
       border-radius: 8px;
-      margin-top: 10px;
+
+      margin-top: 15px;
     }
+
+    .cause h3,
+    .solution h3 {
+      margin-top: 0;
+    }
+
+    /* =========================
+       BACK BUTTON
+       ========================= */
 
     .back-button {
       text-align: center;
       margin: 30px;
     }
 
-    button {
+    button.back {
       padding: 12px 25px;
+
       background: #2563eb;
+
       border: none;
+
       border-radius: 8px;
+
       color: white;
+
       font-size: 16px;
+
       cursor: pointer;
     }
 
-    button:hover {
+    button.back:hover {
       background: #1d4ed8;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    th,
-    td {
-      border: 1px solid #475569;
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      background: #334155;
     }
 
   </style>
@@ -105,6 +161,10 @@
 
 <body>
 
+
+<!-- =========================
+     HEADER
+     ========================= -->
 
 <header>
 
@@ -118,77 +178,163 @@
 <div class="container">
 
 
-  <!-- QUICK REFERENCE -->
+  <!-- =========================
+       PROBLEM LIST
+       ========================= -->
 
-  <div class="problem">
+  <div class="problem-list">
 
-    <h2>1. Quick Troubleshooting Reference</h2>
+    <h2>Select a Problem</h2>
 
-    <table>
+    <p>
+      Select the problem you are experiencing to view
+      the possible cause and recommended action.
+    </p>
 
-      <tr>
-        <th>Problem</th>
-        <th>Possible Cause</th>
-        <th>Recommended Action</th>
-      </tr>
 
-      <tr>
-        <td>Dashboard shows no data</td>
-        <td>ESP32 or Wi-Fi connection problem</td>
-        <td>Check ESP32 power and Wi-Fi connection.</td>
-      </tr>
+    <button
+      class="problem-button"
+      onclick="showProblem('noData')">
 
-      <tr>
-        <td>Battery voltage unavailable</td>
-        <td>Voltage sensor or wiring problem</td>
-        <td>Check voltage sensor connections.</td>
-      </tr>
+      1. Dashboard Shows No Data
 
-      <tr>
-        <td>Battery percentage abnormal</td>
-        <td>Incorrect voltage reading or battery condition</td>
-        <td>Check battery voltage and sensor connection.</td>
-      </tr>
+    </button>
 
-      <tr>
-        <td>Temperature is high</td>
-        <td>Excessive heating or insufficient ventilation</td>
-        <td>Check UPS ventilation and operating conditions.</td>
-      </tr>
 
-      <tr>
-        <td>Vibration detected</td>
-        <td>Mechanical movement or vibration near UPS</td>
-        <td>Check UPS mounting and surrounding equipment.</td>
-      </tr>
+    <button
+      class="problem-button"
+      onclick="showProblem('voltage')">
 
-      <tr>
-        <td>Current reading unavailable</td>
-        <td>Current sensor or connection problem</td>
-        <td>Check current sensor wiring.</td>
-      </tr>
+      2. Battery Voltage Not Displayed
 
-      <tr>
-        <td>UPS status shows FAULT</td>
-        <td>Abnormal operating condition</td>
-        <td>Check voltage, temperature, current and vibration readings.</td>
-      </tr>
+    </button>
 
-    </table>
+
+    <button
+      class="problem-button"
+      onclick="showProblem('battery')">
+
+      3. Battery Percentage Appears Incorrect
+
+    </button>
+
+
+    <button
+      class="problem-button"
+      onclick="showProblem('temperature')">
+
+      4. Temperature Reading is High
+
+    </button>
+
+
+    <button
+      class="problem-button"
+      onclick="showProblem('vibration')">
+
+      5. Vibration Detected
+
+    </button>
+
+
+    <button
+      class="problem-button"
+      onclick="showProblem('fault')">
+
+      6. UPS Status Shows FAULT
+
+    </button>
 
   </div>
 
 
-  <!-- PROBLEM 1 -->
+  <!-- =========================
+       PROBLEM DETAILS
+       ========================= -->
 
-  <div class="problem">
+  <div
+    id="problemDetails"
+    class="problem-details">
 
-    <h2>2. Dashboard Shows No Data</h2>
+
+    <h2 id="problemTitle">
+      Select a problem
+    </h2>
+
+
+    <!-- POSSIBLE CAUSE -->
 
     <div class="cause">
 
-      <strong>Possible Causes:</strong>
+      <h3>
+        ⚠️ Possible Cause
+      </h3>
 
+      <div id="causeText">
+        --
+      </div>
+
+    </div>
+
+
+    <!-- RECOMMENDED ACTION -->
+
+    <div class="solution">
+
+      <h3>
+        ✅ Recommended Action
+      </h3>
+
+      <div id="solutionText">
+        --
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+<!-- =========================
+     BACK BUTTON
+     ========================= -->
+
+<div class="back-button">
+
+  <button
+    class="back"
+    onclick="goBack()">
+
+    ⬅ Back to Documentation
+
+  </button>
+
+</div>
+
+
+<script>
+
+
+// =====================================================
+// INTERACTIVE TROUBLESHOOTING DATA
+// =====================================================
+
+const troubleshootingData = {
+
+
+  // ---------------------------------------------------
+  // 1. DASHBOARD NO DATA
+  // ---------------------------------------------------
+
+  noData: {
+
+    title:
+      "1. Dashboard Shows No Data",
+
+    cause: `
       <ul>
 
         <li>ESP32 is not powered.</li>
@@ -200,13 +346,9 @@
         <li>Sensor data is not being transmitted.</li>
 
       </ul>
+    `,
 
-    </div>
-
-    <div class="solution">
-
-      <strong>Recommended Actions:</strong>
-
+    solution: `
       <ol>
 
         <li>Check ESP32 power supply.</li>
@@ -220,22 +362,21 @@
         <li>Check sensor connections.</li>
 
       </ol>
+    `
 
-    </div>
-
-  </div>
+  },
 
 
-  <!-- PROBLEM 2 -->
+  // ---------------------------------------------------
+  // 2. BATTERY VOLTAGE
+  // ---------------------------------------------------
 
-  <div class="problem">
+  voltage: {
 
-    <h2>3. Battery Voltage Not Displayed</h2>
+    title:
+      "2. Battery Voltage Not Displayed",
 
-    <div class="cause">
-
-      <strong>Possible Causes:</strong>
-
+    cause: `
       <ul>
 
         <li>Voltage sensor is disconnected.</li>
@@ -245,13 +386,9 @@
         <li>ESP32 is not receiving the sensor value.</li>
 
       </ul>
+    `,
 
-    </div>
-
-    <div class="solution">
-
-      <strong>Recommended Actions:</strong>
-
+    solution: `
       <ol>
 
         <li>Check voltage sensor wiring.</li>
@@ -263,167 +400,186 @@
         <li>Check the value stored in Firebase.</li>
 
       </ol>
+    `
 
-    </div>
-
-  </div>
+  },
 
 
-  <!-- PROBLEM 3 -->
+  // ---------------------------------------------------
+  // 3. BATTERY PERCENTAGE
+  // ---------------------------------------------------
 
-  <div class="problem">
+  battery: {
 
-    <h2>4. Battery Percentage Appears Incorrect</h2>
+    title:
+      "3. Battery Percentage Appears Incorrect",
 
-    <div class="cause">
-
-      <strong>Possible Causes:</strong>
-
+    cause: `
       <ul>
 
         <li>Incorrect battery voltage measurement.</li>
 
-        <li>Battery voltage-to-percentage mapping is inaccurate.</li>
+        <li>
+          Battery voltage-to-percentage mapping
+          is inaccurate.
+        </li>
 
         <li>Battery condition has changed.</li>
 
       </ul>
+    `,
 
-    </div>
-
-    <div class="solution">
-
-      <strong>Recommended Actions:</strong>
-
+    solution: `
       <ol>
 
-        <li>Verify the measured battery voltage.</li>
+        <li>
+          Verify the measured battery voltage.
+        </li>
 
-        <li>Check the battery percentage calculation.</li>
+        <li>
+          Check the battery percentage calculation.
+        </li>
 
-        <li>Compare the reading with a suitable multimeter measurement.</li>
+        <li>
+          Compare the reading with a suitable
+          multimeter measurement.
+        </li>
 
       </ol>
+    `
 
-    </div>
-
-  </div>
+  },
 
 
-  <!-- PROBLEM 4 -->
+  // ---------------------------------------------------
+  // 4. TEMPERATURE
+  // ---------------------------------------------------
 
-  <div class="problem">
+  temperature: {
 
-    <h2>5. Temperature Reading is High</h2>
+    title:
+      "4. Temperature Reading is High",
 
-    <div class="cause">
-
-      <strong>Possible Causes:</strong>
-
+    cause: `
       <ul>
 
-        <li>UPS is operating under high load.</li>
+        <li>
+          UPS is operating under high load.
+        </li>
 
-        <li>Insufficient ventilation.</li>
+        <li>
+          Insufficient ventilation.
+        </li>
 
-        <li>Ambient temperature is high.</li>
+        <li>
+          Ambient temperature is high.
+        </li>
 
-        <li>Temperature sensor is positioned incorrectly.</li>
+        <li>
+          Temperature sensor is positioned incorrectly.
+        </li>
 
       </ul>
+    `,
 
-    </div>
-
-    <div class="solution">
-
-      <strong>Recommended Actions:</strong>
-
+    solution: `
       <ol>
 
         <li>Check the UPS load.</li>
 
         <li>Improve ventilation.</li>
 
-        <li>Check the temperature sensor position.</li>
+        <li>
+          Check the temperature sensor position.
+        </li>
 
-        <li>Allow the system to cool before further operation if necessary.</li>
+        <li>
+          Allow the system to cool before
+          further operation if necessary.
+        </li>
 
       </ol>
+    `
 
-    </div>
-
-  </div>
+  },
 
 
-  <!-- PROBLEM 5 -->
+  // ---------------------------------------------------
+  // 5. VIBRATION
+  // ---------------------------------------------------
 
-  <div class="problem">
+  vibration: {
 
-    <h2>6. Vibration Detected</h2>
+    title:
+      "5. Vibration Detected",
 
-    <div class="cause">
-
-      <strong>Possible Causes:</strong>
-
+    cause: `
       <ul>
 
         <li>UPS enclosure is moving.</li>
 
-        <li>External mechanical vibration is present.</li>
+        <li>
+          External mechanical vibration is present.
+        </li>
 
-        <li>SW-420 vibration sensor is too sensitive.</li>
+        <li>
+          SW-420 vibration sensor is too sensitive.
+        </li>
 
       </ul>
+    `,
 
-    </div>
-
-    <div class="solution">
-
-      <strong>Recommended Actions:</strong>
-
+    solution: `
       <ol>
 
         <li>Check the UPS mounting.</li>
 
-        <li>Check nearby mechanical equipment.</li>
+        <li>
+          Check nearby mechanical equipment.
+        </li>
 
-        <li>Verify the SW-420 sensor mounting.</li>
+        <li>
+          Verify the SW-420 sensor mounting.
+        </li>
 
       </ol>
+    `
 
-    </div>
-
-  </div>
+  },
 
 
-  <!-- PROBLEM 6 -->
+  // ---------------------------------------------------
+  // 6. UPS FAULT
+  // ---------------------------------------------------
 
-  <div class="problem">
+  fault: {
 
-    <h2>7. UPS Status Shows FAULT</h2>
+    title:
+      "6. UPS Status Shows FAULT",
 
-    <div class="cause">
-
-      <strong>Possible Causes:</strong>
-
+    cause: `
       <ul>
 
-        <li>Battery voltage is outside the expected range.</li>
+        <li>
+          Battery voltage is outside the expected range.
+        </li>
 
-        <li>Temperature is too high.</li>
+        <li>
+          Temperature is too high.
+        </li>
 
-        <li>Abnormal current is detected.</li>
+        <li>
+          Abnormal current is detected.
+        </li>
 
-        <li>Vibration condition is abnormal.</li>
+        <li>
+          Vibration condition is abnormal.
+        </li>
 
       </ul>
+    `,
 
-    </div>
-
-    <div class="solution">
-
-      <strong>Recommended Actions:</strong>
-
+    solution: `
       <ol>
 
         <li>Check battery voltage.</li>
@@ -434,68 +590,88 @@
 
         <li>Check vibration condition.</li>
 
-        <li>Inspect the UPS if the fault persists.</li>
+        <li>
+          Inspect the UPS if the fault persists.
+        </li>
 
       </ol>
-
-    </div>
-
-  </div>
-
-
-  <!-- SAFETY -->
-
-  <div class="problem">
-
-    <h2>8. Safety Precautions</h2>
-
-    <ul>
-
-      <li>
-        Do not short-circuit the battery terminals.
-      </li>
-
-      <li>
-        Do not exceed the rated UPS load.
-      </li>
-
-      <li>
-        Disconnect power before modifying hardware connections.
-      </li>
-
-      <li>
-        Keep the UPS away from water and excessive heat.
-      </li>
-
-      <li>
-        If an electrical fault is suspected, stop operation
-        and inspect the system safely.
-      </li>
-
-    </ul>
-
-  </div>
-
-
-</div>
-
-
-<div class="back-button">
-
-  <button onclick="goBack()">
-    ⬅ Back to UPS Dashboard
-  </button>
-
-</div>
-
-
-<script>
-
-  function goBack() {
-
-    window.history.back();
+    `
 
   }
+
+};
+
+
+// =====================================================
+// SHOW SELECTED PROBLEM
+// =====================================================
+
+function showProblem(problemId) {
+
+
+  const problem =
+    troubleshootingData[problemId];
+
+
+  if (!problem) {
+    return;
+  }
+
+
+  // Change problem title
+
+  document.getElementById(
+    "problemTitle"
+  ).innerHTML =
+    problem.title;
+
+
+  // Change possible cause
+
+  document.getElementById(
+    "causeText"
+  ).innerHTML =
+    problem.cause;
+
+
+  // Change recommended action
+
+  document.getElementById(
+    "solutionText"
+  ).innerHTML =
+    problem.solution;
+
+
+  // Show details
+
+  document.getElementById(
+    "problemDetails"
+  ).style.display =
+    "block";
+
+
+  // Scroll to details
+
+  document.getElementById(
+    "problemDetails"
+  ).scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+
+// =====================================================
+// BACK TO DOCUMENTATION
+// =====================================================
+
+function goBack() {
+
+  window.location.href =
+    "documentation.html";
+
+}
+
 
 </script>
 
