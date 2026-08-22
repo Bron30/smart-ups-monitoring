@@ -99,9 +99,7 @@
 <div class="container">
 
 
-  <!-- =========================
-       USER MANUAL
-       ========================= -->
+  <!-- USER MANUAL -->
 
   <div class="card"
        onclick="openManual()">
@@ -115,9 +113,7 @@
   </div>
 
 
-  <!-- =========================
-       TROUBLESHOOTING
-       ========================= -->
+  <!-- TROUBLESHOOTING -->
 
   <div class="card"
        onclick="openTroubleshooting()">
@@ -133,8 +129,6 @@
 
 </div>
 
-
-<!-- BACK BUTTON -->
 
 <button class="back-button"
         onclick="goBack()">
@@ -161,9 +155,7 @@ const upsId =
   params.get("id") || "UPS1";
 
 
-// ==========================================
-// DISPLAY UPS ID
-// ==========================================
+// Display UPS ID
 
 document.getElementById("title").innerText =
   "📚 " + upsId + " Documentation";
@@ -187,14 +179,14 @@ function openManual() {
 
 function openTroubleshooting() {
 
-  window.location.href = "troubleshooting.html";
-    
+  window.location.href =
+    "troubleshooting.html?id=" + upsId;
 
 }
 
 
 // ==========================================
-// BACK BUTTON
+// BACK
 // ==========================================
 
 function goBack() {
@@ -203,7 +195,6 @@ function goBack() {
     "index.html";
 
 }
-
 
 </script>
 
