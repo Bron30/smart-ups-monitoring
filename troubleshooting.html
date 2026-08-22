@@ -52,6 +52,10 @@
       margin-top: 0;
     }
 
+    .problem-list p {
+      color: #cbd5e1;
+    }
+
     .problem-button {
       display: block;
       width: 100%;
@@ -79,6 +83,7 @@
       transform: translateX(5px);
     }
 
+
     /* =========================
        PROBLEM DETAILS
        ========================= */
@@ -100,6 +105,11 @@
       margin-top: 0;
     }
 
+
+    /* =========================
+       POSSIBLE CAUSE
+       ========================= */
+
     .cause {
       background: #334155;
 
@@ -109,6 +119,16 @@
 
       margin-top: 15px;
     }
+
+    .cause h3 {
+      margin-top: 0;
+      color: #facc15;
+    }
+
+
+    /* =========================
+       RECOMMENDED ACTION
+       ========================= */
 
     .solution {
       background: #14532d;
@@ -120,10 +140,11 @@
       margin-top: 15px;
     }
 
-    .cause h3,
     .solution h3 {
       margin-top: 0;
+      color: #86efac;
     }
+
 
     /* =========================
        BACK BUTTON
@@ -170,7 +191,9 @@
 
   <h1>🔧 UPS Troubleshooting Guide</h1>
 
-  <p>Smart DC UPS Monitoring System</p>
+  <p>
+    Smart DC UPS Monitoring System
+  </p>
 
 </header>
 
@@ -184,68 +207,125 @@
 
   <div class="problem-list">
 
-    <h2>Select a Problem</h2>
+    <h2>What problem are you experiencing?</h2>
 
     <p>
-      Select the problem you are experiencing to view
-      the possible cause and recommended action.
+      Select the problem below to view the possible
+      causes and recommended actions.
     </p>
 
 
+    <!-- 1 -->
+
     <button
       class="problem-button"
-      onclick="showProblem('noData')">
+      onclick="showProblem('noPower')">
 
-      1. Dashboard Shows No Data
+      ⚡ UPS/Inverter is Not Supplying Power
 
     </button>
 
+
+    <!-- 2 -->
+
+    <button
+      class="problem-button"
+      onclick="showProblem('notCharging')">
+
+      🔋 Battery is Not Charging
+
+    </button>
+
+
+    <!-- 3 -->
+
+    <button
+      class="problem-button"
+      onclick="showProblem('lowBackup')">
+
+      ⏱️ Backup Time is Very Low
+
+    </button>
+
+
+    <!-- 4 -->
 
     <button
       class="problem-button"
       onclick="showProblem('voltage')">
 
-      2. Battery Voltage Not Displayed
+      ⚡ Battery Voltage is Abnormal
 
     </button>
 
+
+    <!-- 5 -->
 
     <button
       class="problem-button"
-      onclick="showProblem('battery')">
+      onclick="showProblem('overheating')">
 
-      3. Battery Percentage Appears Incorrect
+      🌡️ UPS/Inverter is Overheating
 
     </button>
 
+
+    <!-- 6 -->
 
     <button
       class="problem-button"
-      onclick="showProblem('temperature')">
+      onclick="showProblem('noise')">
 
-      4. Temperature Reading is High
-
-    </button>
-
-
-    <button
-      class="problem-button"
-      onclick="showProblem('vibration')">
-
-      5. Vibration Detected
+      🔊 Unusual Noise or Vibration
 
     </button>
 
+
+    <!-- 7 -->
 
     <button
       class="problem-button"
       onclick="showProblem('fault')">
 
-      6. UPS Status Shows FAULT
+      ⚠️ UPS/Inverter Shows FAULT
+
+    </button>
+
+
+    <!-- 8 -->
+
+    <button
+      class="problem-button"
+      onclick="showProblem('unstableOutput')">
+
+      ⚡ Output Power is Unstable
+
+    </button>
+
+
+    <!-- 9 -->
+
+    <button
+      class="problem-button"
+      onclick="showProblem('frequentBattery')">
+
+      🔄 UPS Switches to Battery Frequently
+
+    </button>
+
+
+    <!-- 10 -->
+
+    <button
+      class="problem-button"
+      onclick="showProblem('notTurningOn')">
+
+      🔴 UPS/Inverter Does Not Turn ON
 
     </button>
 
   </div>
+
 
 
   <!-- =========================
@@ -298,6 +378,7 @@
 </div>
 
 
+
 <!-- =========================
      BACK BUTTON
      ========================= -->
@@ -315,35 +396,48 @@
 </div>
 
 
+
 <script>
 
 
 // =====================================================
-// INTERACTIVE TROUBLESHOOTING DATA
+// PRACTICAL UPS TROUBLESHOOTING DATABASE
 // =====================================================
 
 const troubleshootingData = {
 
 
-  // ---------------------------------------------------
-  // 1. DASHBOARD NO DATA
-  // ---------------------------------------------------
+  // ===================================================
+  // 1. UPS NOT SUPPLYING POWER
+  // ===================================================
 
-  noData: {
+  noPower: {
 
     title:
-      "1. Dashboard Shows No Data",
+      "⚡ UPS/Inverter is Not Supplying Power",
 
     cause: `
       <ul>
 
-        <li>ESP32 is not powered.</li>
+        <li>
+          Mains power may be unavailable.
+        </li>
 
-        <li>ESP32 is not connected to Wi-Fi.</li>
+        <li>
+          Battery may be deeply discharged.
+        </li>
 
-        <li>Firebase connection is unavailable.</li>
+        <li>
+          UPS output protection may have activated.
+        </li>
 
-        <li>Sensor data is not being transmitted.</li>
+        <li>
+          Connected load may exceed the rated capacity.
+        </li>
+
+        <li>
+          An internal UPS fault may be present.
+        </li>
 
       </ul>
     `,
@@ -351,15 +445,31 @@ const troubleshootingData = {
     solution: `
       <ol>
 
-        <li>Check ESP32 power supply.</li>
+        <li>
+          Check whether mains power is available.
+        </li>
 
-        <li>Check Wi-Fi availability.</li>
+        <li>
+          Check the UPS input and output connections.
+        </li>
 
-        <li>Check ESP32 serial monitor.</li>
+        <li>
+          Reduce excessive connected load.
+        </li>
 
-        <li>Verify Firebase data.</li>
+        <li>
+          Check the battery condition.
+        </li>
 
-        <li>Check sensor connections.</li>
+        <li>
+          Restart the UPS according to the manufacturer's
+          operating procedure.
+        </li>
+
+        <li>
+          If the problem persists, arrange professional
+          inspection or service.
+        </li>
 
       </ol>
     `
@@ -367,23 +477,167 @@ const troubleshootingData = {
   },
 
 
-  // ---------------------------------------------------
-  // 2. BATTERY VOLTAGE
-  // ---------------------------------------------------
+  // ===================================================
+  // 2. BATTERY NOT CHARGING
+  // ===================================================
+
+  notCharging: {
+
+    title:
+      "🔋 Battery is Not Charging",
+
+    cause: `
+      <ul>
+
+        <li>
+          Mains input may be unavailable.
+        </li>
+
+        <li>
+          Battery connections may be loose.
+        </li>
+
+        <li>
+          Battery may be aged or damaged.
+        </li>
+
+        <li>
+          Charging circuit may have a fault.
+        </li>
+
+        <li>
+          Battery voltage may be outside the expected range.
+        </li>
+
+      </ul>
+    `,
+
+    solution: `
+      <ol>
+
+        <li>
+          Confirm that mains power is available.
+        </li>
+
+        <li>
+          Check the battery connections.
+        </li>
+
+        <li>
+          Check the battery voltage.
+        </li>
+
+        <li>
+          Allow sufficient charging time.
+        </li>
+
+        <li>
+          If the battery still does not charge,
+          arrange battery or UPS inspection.
+        </li>
+
+      </ol>
+    `
+
+  },
+
+
+  // ===================================================
+  // 3. LOW BACKUP TIME
+  // ===================================================
+
+  lowBackup: {
+
+    title:
+      "⏱️ Backup Time is Very Low",
+
+    cause: `
+      <ul>
+
+        <li>
+          Battery capacity may have degraded.
+        </li>
+
+        <li>
+          Connected load may be too high.
+        </li>
+
+        <li>
+          Battery may not be fully charged.
+        </li>
+
+        <li>
+          Battery may be near the end of its service life.
+        </li>
+
+        <li>
+          UPS operating conditions may be abnormal.
+        </li>
+
+      </ul>
+    `,
+
+    solution: `
+      <ol>
+
+        <li>
+          Check the connected load.
+        </li>
+
+        <li>
+          Ensure that the battery is fully charged.
+        </li>
+
+        <li>
+          Check the battery voltage.
+        </li>
+
+        <li>
+          Reduce unnecessary loads.
+        </li>
+
+        <li>
+          If backup time remains very low,
+          have the battery tested.
+        </li>
+
+      </ol>
+    `
+
+  },
+
+
+  // ===================================================
+  // 4. ABNORMAL BATTERY VOLTAGE
+  // ===================================================
 
   voltage: {
 
     title:
-      "2. Battery Voltage Not Displayed",
+      "⚡ Battery Voltage is Abnormal",
 
     cause: `
       <ul>
 
-        <li>Voltage sensor is disconnected.</li>
+        <li>
+          Battery may be over-discharged.
+        </li>
 
-        <li>Sensor wiring is incorrect.</li>
+        <li>
+          Battery may be overcharged.
+        </li>
 
-        <li>ESP32 is not receiving the sensor value.</li>
+        <li>
+          Battery terminals may have a poor connection.
+        </li>
+
+        <li>
+          Battery may be aged or damaged.
+        </li>
+
+        <li>
+          Charging or protection circuitry may have a fault.
+        </li>
 
       </ul>
     `,
@@ -391,13 +645,28 @@ const troubleshootingData = {
     solution: `
       <ol>
 
-        <li>Check voltage sensor wiring.</li>
+        <li>
+          Check the battery voltage using an appropriate
+          measuring instrument.
+        </li>
 
-        <li>Check the sensor output.</li>
+        <li>
+          Check battery terminal connections.
+        </li>
 
-        <li>Verify the ESP32 input pin.</li>
+        <li>
+          Allow the battery to charge properly.
+        </li>
 
-        <li>Check the value stored in Firebase.</li>
+        <li>
+          Avoid continued operation if the battery
+          voltage is significantly abnormal.
+        </li>
+
+        <li>
+          Arrange professional inspection if the
+          abnormal condition persists.
+        </li>
 
       </ol>
     `
@@ -405,26 +674,37 @@ const troubleshootingData = {
   },
 
 
-  // ---------------------------------------------------
-  // 3. BATTERY PERCENTAGE
-  // ---------------------------------------------------
+  // ===================================================
+  // 5. OVERHEATING
+  // ===================================================
 
-  battery: {
+  overheating: {
 
     title:
-      "3. Battery Percentage Appears Incorrect",
+      "🌡️ UPS/Inverter is Overheating",
 
     cause: `
       <ul>
 
-        <li>Incorrect battery voltage measurement.</li>
-
         <li>
-          Battery voltage-to-percentage mapping
-          is inaccurate.
+          UPS may be operating with excessive load.
         </li>
 
-        <li>Battery condition has changed.</li>
+        <li>
+          Ventilation openings may be blocked.
+        </li>
+
+        <li>
+          Ambient temperature may be high.
+        </li>
+
+        <li>
+          Cooling system may not be operating properly.
+        </li>
+
+        <li>
+          UPS may have an internal fault.
+        </li>
 
       </ul>
     `,
@@ -433,16 +713,24 @@ const troubleshootingData = {
       <ol>
 
         <li>
-          Verify the measured battery voltage.
+          Reduce the connected load.
         </li>
 
         <li>
-          Check the battery percentage calculation.
+          Ensure that ventilation openings are clear.
         </li>
 
         <li>
-          Compare the reading with a suitable
-          multimeter measurement.
+          Move the UPS to a suitable, well-ventilated location.
+        </li>
+
+        <li>
+          Allow the unit to cool before continued operation.
+        </li>
+
+        <li>
+          If overheating continues, stop operation and
+          arrange professional inspection.
         </li>
 
       </ol>
@@ -451,32 +739,37 @@ const troubleshootingData = {
   },
 
 
-  // ---------------------------------------------------
-  // 4. TEMPERATURE
-  // ---------------------------------------------------
+  // ===================================================
+  // 6. UNUSUAL NOISE OR VIBRATION
+  // ===================================================
 
-  temperature: {
+  noise: {
 
     title:
-      "4. Temperature Reading is High",
+      "🔊 Unusual Noise or Vibration",
 
     cause: `
       <ul>
 
         <li>
-          UPS is operating under high load.
+          Cooling fan may be obstructed or damaged.
         </li>
 
         <li>
-          Insufficient ventilation.
+          UPS may not be mounted securely.
         </li>
 
         <li>
-          Ambient temperature is high.
+          Internal components may be vibrating.
         </li>
 
         <li>
-          Temperature sensor is positioned incorrectly.
+          Mechanical components may be worn.
+        </li>
+
+        <li>
+          An internal electrical or mechanical fault
+          may be present.
         </li>
 
       </ul>
@@ -485,61 +778,26 @@ const troubleshootingData = {
     solution: `
       <ol>
 
-        <li>Check the UPS load.</li>
-
-        <li>Improve ventilation.</li>
-
         <li>
-          Check the temperature sensor position.
+          Check whether the UPS is securely positioned.
         </li>
 
         <li>
-          Allow the system to cool before
-          further operation if necessary.
-        </li>
-
-      </ol>
-    `
-
-  },
-
-
-  // ---------------------------------------------------
-  // 5. VIBRATION
-  // ---------------------------------------------------
-
-  vibration: {
-
-    title:
-      "5. Vibration Detected",
-
-    cause: `
-      <ul>
-
-        <li>UPS enclosure is moving.</li>
-
-        <li>
-          External mechanical vibration is present.
+          Check for objects blocking ventilation.
         </li>
 
         <li>
-          SW-420 vibration sensor is too sensitive.
-        </li>
-
-      </ul>
-    `,
-
-    solution: `
-      <ol>
-
-        <li>Check the UPS mounting.</li>
-
-        <li>
-          Check nearby mechanical equipment.
+          Listen for unusual fan or mechanical sounds.
         </li>
 
         <li>
-          Verify the SW-420 sensor mounting.
+          Do not open the UPS enclosure unless qualified
+          to perform the inspection.
+        </li>
+
+        <li>
+          If unusual noise continues, arrange professional
+          inspection.
         </li>
 
       </ol>
@@ -548,32 +806,36 @@ const troubleshootingData = {
   },
 
 
-  // ---------------------------------------------------
-  // 6. UPS FAULT
-  // ---------------------------------------------------
+  // ===================================================
+  // 7. UPS FAULT
+  // ===================================================
 
   fault: {
 
     title:
-      "6. UPS Status Shows FAULT",
+      "⚠️ UPS/Inverter Shows FAULT",
 
     cause: `
       <ul>
 
         <li>
-          Battery voltage is outside the expected range.
+          Battery voltage may be outside the acceptable range.
         </li>
 
         <li>
-          Temperature is too high.
+          UPS may be overloaded.
         </li>
 
         <li>
-          Abnormal current is detected.
+          Temperature may be too high.
         </li>
 
         <li>
-          Vibration condition is abnormal.
+          Output protection may have activated.
+        </li>
+
+        <li>
+          An internal UPS fault may be present.
         </li>
 
       </ul>
@@ -582,16 +844,224 @@ const troubleshootingData = {
     solution: `
       <ol>
 
-        <li>Check battery voltage.</li>
-
-        <li>Check temperature.</li>
-
-        <li>Check load current.</li>
-
-        <li>Check vibration condition.</li>
+        <li>
+          Check the UPS load.
+        </li>
 
         <li>
-          Inspect the UPS if the fault persists.
+          Check the battery condition.
+        </li>
+
+        <li>
+          Check whether the unit is overheating.
+        </li>
+
+        <li>
+          Disconnect unnecessary loads.
+        </li>
+
+        <li>
+          Restart the UPS according to the manufacturer's
+          instructions.
+        </li>
+
+        <li>
+          If FAULT remains, stop operation and arrange
+          professional service.
+        </li>
+
+      </ol>
+    `
+
+  },
+
+
+  // ===================================================
+  // 8. UNSTABLE OUTPUT
+  // ===================================================
+
+  unstableOutput: {
+
+    title:
+      "⚡ Output Power is Unstable",
+
+    cause: `
+      <ul>
+
+        <li>
+          Connected load may be excessive.
+        </li>
+
+        <li>
+          Input power may be unstable.
+        </li>
+
+        <li>
+          Battery condition may be poor.
+        </li>
+
+        <li>
+          UPS protection may be activating intermittently.
+        </li>
+
+        <li>
+          An internal UPS fault may be present.
+        </li>
+
+      </ul>
+    `,
+
+    solution: `
+      <ol>
+
+        <li>
+          Check the input power supply.
+        </li>
+
+        <li>
+          Reduce the connected load.
+        </li>
+
+        <li>
+          Check the battery condition.
+        </li>
+
+        <li>
+          Check whether the UPS indicates a warning or fault.
+        </li>
+
+        <li>
+          If unstable output continues, arrange professional
+          inspection.
+        </li>
+
+      </ol>
+    `
+
+  },
+
+
+  // ===================================================
+  // 9. FREQUENT BATTERY SWITCHING
+  // ===================================================
+
+  frequentBattery: {
+
+    title:
+      "🔄 UPS Switches to Battery Frequently",
+
+    cause: `
+      <ul>
+
+        <li>
+          Mains input may be unstable.
+        </li>
+
+        <li>
+          Input voltage may be outside the acceptable range.
+        </li>
+
+        <li>
+          UPS input connections may be loose.
+        </li>
+
+        <li>
+          UPS operating mode may be changing due to
+          unstable supply conditions.
+        </li>
+
+      </ul>
+    `,
+
+    solution: `
+      <ol>
+
+        <li>
+          Check the incoming mains supply.
+        </li>
+
+        <li>
+          Check the UPS input connection.
+        </li>
+
+        <li>
+          Observe whether the problem occurs repeatedly.
+        </li>
+
+        <li>
+          If frequent switching continues,
+          arrange professional inspection.
+        </li>
+
+      </ol>
+    `
+
+  },
+
+
+  // ===================================================
+  // 10. UPS DOES NOT TURN ON
+  // ===================================================
+
+  notTurningOn: {
+
+    title:
+      "🔴 UPS/Inverter Does Not Turn ON",
+
+    cause: `
+      <ul>
+
+        <li>
+          Battery may be completely discharged.
+        </li>
+
+        <li>
+          Mains input may be unavailable.
+        </li>
+
+        <li>
+          Power switch may be OFF.
+        </li>
+
+        <li>
+          Battery connection may be loose.
+        </li>
+
+        <li>
+          An internal fault may have occurred.
+        </li>
+
+      </ul>
+    `,
+
+    solution: `
+      <ol>
+
+        <li>
+          Check the mains supply.
+        </li>
+
+        <li>
+          Check whether the UPS power switch is ON.
+        </li>
+
+        <li>
+          Check the battery connection if it is safely
+          accessible.
+        </li>
+
+        <li>
+          Allow the battery to charge if it is deeply discharged.
+        </li>
+
+        <li>
+          Try restarting the UPS according to the
+          manufacturer's instructions.
+        </li>
+
+        <li>
+          If the UPS still does not turn ON,
+          arrange professional service.
         </li>
 
       </ol>
@@ -608,17 +1078,18 @@ const troubleshootingData = {
 
 function showProblem(problemId) {
 
-
   const problem =
     troubleshootingData[problemId];
 
 
   if (!problem) {
+
     return;
+
   }
 
 
-  // Change problem title
+  // Change title
 
   document.getElementById(
     "problemTitle"
@@ -642,7 +1113,7 @@ function showProblem(problemId) {
     problem.solution;
 
 
-  // Show details
+  // Display details
 
   document.getElementById(
     "problemDetails"
@@ -650,7 +1121,7 @@ function showProblem(problemId) {
     "block";
 
 
-  // Scroll to details
+  // Scroll to selected problem
 
   document.getElementById(
     "problemDetails"
