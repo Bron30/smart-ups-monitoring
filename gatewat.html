@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Secure UPS Access</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      width: 320px;
+      padding: 25px;
+      background: white;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>Secure UPS Access</h2>
+
+    <p id="deviceInfo">Checking QR...</p>
+
+    <div id="loginBox">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+
+      <button onclick="login()">Login</button>
+    </div>
+
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      get
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+    // IMPORTANT:
+    // Replace these values with your EXISTING Firebase web app configuration.
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+
+      authDomain: "qr-machine-project.firebaseapp.com",
+
+      databaseURL:
+        "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+      projectId: "qr-machine-project",
+
+      storageBucket:
+        "qr-machine-project.firebasestorage.app",
+
+      messagingSenderId: "598012619360",
+
+      appId: "1:598012619360:web:866a499dc738adf66f3105"
+
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+
+    const params = new URLSearchParams(window.location.search);
+
+    const qrId = params.get("id");
+
+
+    if (!qrId) {
+
+      document.getElementById("deviceInfo").textContent =
+        "Invalid QR Code";
+
+      document.getElementById("loginBox").style.display = "none";
+
+    } else {
+
+      document.getElementById("deviceInfo").textContent =
+        "QR Device: " + qrId;
+
+    }
+
+
+    window.login = async function() {
+
+      const email =
+        document.getElementById("email").value;
+
+      const password =
+        document.getElementById("password").value;
+
+      const message =
+        document.getElementById("message");
+
+
+      if (!qrId) {
+        return;
+      }
+
+
+      try {
+
+        message.textContent = "Authenticating...";
+
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+        message.textContent =
+          "Checking QR authorization...";
+
+
+        const securityRef =
+          ref(database, "UPS1/Security");
+
+
+        const snapshot =
+          await get(securityRef);
+
+
+        if (!snapshot.exists()) {
+
+          message.textContent =
+            "Security configuration not found.";
+
+          return;
+
+        }
+
+
+        const security =
+          snapshot.val();
+
+
+        if (
+          security.QR_ID === qrId &&
+          security.Status === "ACTIVE"
+        ) {
+
+          message.textContent =
+            "Access granted. Opening dashboard...";
+
+
+          setTimeout(() => {
+
+            window.location.href =
+              "./index.html";
+
+          }, 1000);
+
+        } else {
+
+          message.textContent =
+            "Access denied: Invalid or revoked QR.";
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+          "Login failed: " + error.message;
+
+      }
+
+    };
+
+  </script>
+
+</body>
+</html>
