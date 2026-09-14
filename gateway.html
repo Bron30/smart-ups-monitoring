@@ -189,14 +189,18 @@
           security.Status === "ACTIVE"
         ) {
 
-          const user = auth.currentuser;
-          const logRef=push(ref(database,"UPS1/AccessLogss")
-        );
+          const currentUser = auth.currentUser;
+          if(!currentUser){
+            message.textContent="Login failed:User authentication not found.";
+            return;
+          }
+          const logRef=push(ref(database,"UPS1/AccessLogs")
+          );
 
 
           await set(logRef, {
       	    QR_ID: qrId,
-            User: user.email,
+            User: currentUser.email,
             Status: "GRANTED",
             Timestamp: new Date().toISOString()
         });
