@@ -74,7 +74,9 @@
     import {
       getDatabase,
       ref,
-      get
+      get,
+      push,
+      set
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
@@ -187,16 +189,27 @@
           security.Status === "ACTIVE"
         ) {
 
+          const user = auth.currentuser;
+          const logRef=push(ref(database,"UPS1/AccessLogss")
+        );
+
+
+          await set(logRef, {
+      	    QR_ID: qrId,
+            User: user.email,
+            Status: "GRANTED",
+            Timestamp: new Date().toISOString()
+        });
+
           message.textContent =
-            "Access granted. Opening dashboard...";
+      "Access granted. Opening dashboard...";
 
+    setTimeout(() => {
 
-          setTimeout(() => {
+      window.location.href =
+        "./index.html";
 
-            window.location.href =
-              "./index.html";
-
-          }, 1000);
+    }, 1000);
 
         } else {
 
