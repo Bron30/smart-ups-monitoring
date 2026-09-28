@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
   <title>Live Smart UPS Dashboard</title>
 
   <style>
+
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
@@ -24,14 +27,18 @@
     }
 
     @keyframes blink {
+
       50% {
         opacity: 0.3;
       }
+
     }
 
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+
       gap: 20px;
       padding: 20px;
     }
@@ -80,15 +87,25 @@
     button:hover {
       background: #1d4ed8;
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <header id="title">
+
   UPS Dashboard
+
   <br>
-  <span class="live">● LIVE</span>
+
+  <span class="live">
+    ● LIVE
+  </span>
+
 </header>
 
 
@@ -98,157 +115,456 @@
 
 <div class="container">
 
-  <div class="card">
-    <h3>Battery Percentage</h3>
-    <div id="battery" class="value">--</div>
-  </div>
+
+  <!-- BATTERY PERCENTAGE -->
 
   <div class="card">
-    <h3>Battery Voltage</h3>
-    <div id="voltage" class="value">--</div>
+
+    <h3>
+      Battery Percentage
+    </h3>
+
+    <div id="battery"
+         class="value">
+
+      Checking authentication...
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3>Load Current</h3>
-    <div id="current" class="value">--</div>
-  </div>
+
+  <!-- BATTERY VOLTAGE -->
 
   <div class="card">
-    <h3>Temperature</h3>
-    <div id="temp" class="value">--</div>
+
+    <h3>
+      Battery Voltage
+    </h3>
+
+    <div id="voltage"
+         class="value">
+
+      --
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3>Vibration</h3>
-    <div id="vibration" class="value">--</div>
-  </div>
+
+  <!-- LOAD CURRENT -->
 
   <div class="card">
-    <h3>UPS Status</h3>
-    <div id="status" class="status">--</div>
+
+    <h3>
+      Load Current
+    </h3>
+
+    <div id="current"
+         class="value">
+
+      --
+
+    </div>
+
   </div>
+
+
+  <!-- TEMPERATURE -->
+
+  <div class="card">
+
+    <h3>
+      Temperature
+    </h3>
+
+    <div id="temp"
+         class="value">
+
+      --
+
+    </div>
+
+  </div>
+
+
+  <!-- VIBRATION -->
+
+  <div class="card">
+
+    <h3>
+      Vibration
+    </h3>
+
+    <div id="vibration"
+         class="value">
+
+      --
+
+    </div>
+
+  </div>
+
+
+  <!-- UPS STATUS -->
+
+  <div class="card">
+
+    <h3>
+      UPS Status
+    </h3>
+
+    <div id="status"
+         class="status">
+
+      --
+
+    </div>
+
+  </div>
+
 
 </div>
 
 
 <center>
-  <button onclick="goBack()">⬅ Back</button>
+
+  <button onclick="goBack()">
+    ⬅ Back
+  </button>
+
 </center>
 
 
-<!-- Firebase SDK -->
+<!-- =========================
+     FIREBASE SDK
+     ========================= -->
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 
 <script>
 
-  // =========================
-  // GET UPS ID
-  // =========================
 
-  const params =
-    new URLSearchParams(window.location.search);
+// ==========================================
+// GET UPS ID
+// ==========================================
 
-  const upsId =
-    params.get("id") || "UPS1";
-
-
-  // Display UPS ID
-
-  document.getElementById("title").innerHTML =
-    upsId +
-    " Dashboard <br>" +
-    "<span class='live'>● LIVE</span>";
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
 
-  // =========================
-  // FIREBASE CONFIGURATION
-  // =========================
-
-  var firebaseConfig = {
-
-    apiKey:
-      "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
-
-    databaseURL:
-      "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
-
-  };
+const upsId =
+  params.get("id") || "UPS1";
 
 
-  firebase.initializeApp(firebaseConfig);
+// ==========================================
+// DISPLAY UPS ID
+// ==========================================
+
+document.getElementById("title").innerHTML =
+
+  upsId +
+
+  " Dashboard <br>" +
+
+  "<span class='live'>● LIVE</span>";
 
 
-  // =========================
-  // FIREBASE REFERENCES
-  // =========================
+// ==========================================
+// FIREBASE CONFIGURATION
+// ==========================================
+
+var firebaseConfig = {
+
+  apiKey:
+    "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+
+  authDomain:
+    "qr-machine-project.firebaseapp.com",
+
+  databaseURL:
+    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "qr-machine-project"
+
+};
+
+
+// ==========================================
+// INITIALIZE FIREBASE
+// ==========================================
+
+firebase.initializeApp(
+  firebaseConfig
+);
+
+
+// ==========================================
+// FIREBASE AUTHENTICATION
+// ==========================================
+
+var auth =
+  firebase.auth();
+
+
+// ==========================================
+// FIREBASE DATABASE
+// ==========================================
+
+var database =
+  firebase.database();
+
+
+// ==========================================
+// DISPLAY FIREBASE ERROR
+// ==========================================
+
+function showFirebaseError(error) {
+
+  console.error(
+    "Firebase read error:",
+    error
+  );
+
+
+  document.getElementById(
+    "battery"
+  ).innerText =
+    "Firebase Error";
+
+
+  document.getElementById(
+    "voltage"
+  ).innerText =
+    "--";
+
+
+  document.getElementById(
+    "current"
+  ).innerText =
+    "--";
+
+
+  document.getElementById(
+    "temp"
+  ).innerText =
+    "--";
+
+
+  document.getElementById(
+    "vibration"
+  ).innerText =
+    "--";
+
+
+  var statusEl =
+    document.getElementById(
+      "status"
+    );
+
+
+  statusEl.innerText =
+    "DATABASE ERROR";
+
+
+  statusEl.className =
+    "status fault";
+
+}
+
+
+// ==========================================
+// LOAD LIVE UPS DATA
+// ==========================================
+
+function loadUPSData() {
+
+
+  console.log(
+    "Loading UPS data for:",
+    upsId
+  );
+
 
   var latestRef =
-    firebase.database().ref(
+    database.ref(
       upsId + "/Latest"
     );
 
 
-  // =========================
-  // LIVE UPS DATA
-  // =========================
+  // ========================================
+  // REAL-TIME DATABASE LISTENER
+  // ========================================
 
-  latestRef.on("value", function(snapshot) {
+  latestRef.on(
 
-    var data = snapshot.val();
+    "value",
 
-    if (data) {
+    function(snapshot) {
 
-      // Battery Percentage
 
-      document.getElementById("battery").innerText =
+      console.log(
+        "Firebase UPS data:",
+        snapshot.val()
+      );
+
+
+      var data =
+        snapshot.val();
+
+
+      // ====================================
+      // NO DATA
+      // ====================================
+
+      if (!data) {
+
+        document.getElementById(
+          "battery"
+        ).innerText =
+          "--";
+
+
+        document.getElementById(
+          "voltage"
+        ).innerText =
+          "--";
+
+
+        document.getElementById(
+          "current"
+        ).innerText =
+          "--";
+
+
+        document.getElementById(
+          "temp"
+        ).innerText =
+          "--";
+
+
+        document.getElementById(
+          "vibration"
+        ).innerText =
+          "--";
+
+
+        document.getElementById(
+          "status"
+        ).innerText =
+          "NO DATA";
+
+
+        document.getElementById(
+          "status"
+        ).className =
+          "status fault";
+
+
+        return;
+
+      }
+
+
+      // ====================================
+      // BATTERY PERCENTAGE
+      // ====================================
+
+      document.getElementById(
+        "battery"
+      ).innerText =
+
         data.Battery_Percentage !== undefined
+
           ? data.Battery_Percentage + " %"
+
           : "--";
 
 
-      // Battery Voltage
+      // ====================================
+      // BATTERY VOLTAGE
+      // ====================================
 
-      document.getElementById("voltage").innerText =
+      document.getElementById(
+        "voltage"
+      ).innerText =
+
         data.Voltage !== undefined
+
           ? data.Voltage
+
           : "--";
 
 
-      // Load Current
+      // ====================================
+      // LOAD CURRENT
+      // ====================================
 
-      document.getElementById("current").innerText =
+      document.getElementById(
+        "current"
+      ).innerText =
+
         data.Current !== undefined
+
           ? data.Current
+
           : "--";
 
 
-      // Temperature
+      // ====================================
+      // TEMPERATURE
+      // ====================================
 
-      document.getElementById("temp").innerText =
+      document.getElementById(
+        "temp"
+      ).innerText =
+
         data.Temperature !== undefined
+
           ? data.Temperature
+
           : "--";
 
 
-      // Vibration
+      // ====================================
+      // VIBRATION
+      // ====================================
 
-      document.getElementById("vibration").innerText =
+      document.getElementById(
+        "vibration"
+      ).innerText =
+
         data.Vibration !== undefined
+
           ? data.Vibration
+
           : "--";
 
 
-      // UPS Status
+      // ====================================
+      // UPS STATUS
+      // ====================================
 
-      let statusEl =
-        document.getElementById("status");
+      var statusEl =
+        document.getElementById(
+          "status"
+        );
 
 
-      if (data.Status !== undefined) {
+      if (
+        data.Status !== undefined
+      ) {
 
-        let status =
+
+        var status =
           String(data.Status);
 
 
@@ -260,47 +576,171 @@
           "status";
 
 
+        // ==================================
+        // HEALTHY
+        // ==================================
+
         if (
-          status.toLowerCase() === "healthy"
+          status.toLowerCase() ===
+          "healthy"
         ) {
 
-          statusEl.classList.add("healthy");
+          statusEl.classList.add(
+            "healthy"
+          );
 
         }
+
+
+        // ==================================
+        // WARNING
+        // ==================================
 
         else if (
-          status.toLowerCase() === "warning"
+          status.toLowerCase() ===
+          "warning"
         ) {
 
-          statusEl.classList.add("warning");
+          statusEl.classList.add(
+            "warning"
+          );
 
         }
+
+
+        // ==================================
+        // FAULT / OTHER
+        // ==================================
 
         else {
 
-          statusEl.classList.add("fault");
+          statusEl.classList.add(
+            "fault"
+          );
 
         }
 
       }
 
+      else {
+
+        statusEl.innerText =
+          "NO STATUS";
+
+        statusEl.className =
+          "status fault";
+
+      }
+
+    },
+
+    function(error) {
+
+      showFirebaseError(
+        error
+      );
+
     }
 
-  });
+  );
+
+}
 
 
-  // =========================
-  // BACK BUTTON
-  // =========================
+// ==========================================
+// AUTHENTICATION CHECK
+// ==========================================
 
-  function goBack() {
+auth.onAuthStateChanged(
+  function(user) {
 
-    window.location.href =
-      "index.html";
+
+    console.log(
+      "Authentication state:",
+      user
+        ? user.email
+        : "Not authenticated"
+    );
+
+
+    // ======================================
+    // USER NOT AUTHENTICATED
+    // ======================================
+
+    if (!user) {
+
+
+      document.getElementById(
+        "battery"
+      ).innerText =
+        "LOGIN REQUIRED";
+
+
+      document.getElementById(
+        "status"
+      ).innerText =
+        "LOGIN REQUIRED";
+
+
+      document.getElementById(
+        "status"
+      ).className =
+        "status fault";
+
+
+      // Redirect to gateway
+
+      setTimeout(
+        function() {
+
+          window.location.href =
+            "gateway.html?id=UPS001";
+
+        },
+        500
+      );
+
+
+      return;
+
+    }
+
+
+    // ======================================
+    // USER AUTHENTICATED
+    // ======================================
+
+    console.log(
+      "Authenticated user:",
+      user.email
+    );
+
+
+    // ======================================
+    // NOW READ FIREBASE
+    // ======================================
+
+    loadUPSData();
 
   }
+);
+
+
+// ==========================================
+// BACK BUTTON
+// ==========================================
+
+function goBack() {
+
+  window.location.href =
+    "index.html";
+
+}
+
 
 </script>
 
+
 </body>
+
 </html>
