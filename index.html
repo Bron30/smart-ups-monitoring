@@ -92,7 +92,7 @@
     <div id="status_ups1"
          class="status">
 
-      Loading...
+      Checking authentication...
 
     </div>
 
@@ -144,6 +144,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 
@@ -159,13 +161,37 @@ var firebaseConfig = {
   apiKey:
     "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
 
+  authDomain:
+    "qr-machine-project.firebaseapp.com",
+
   databaseURL:
-    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "qr-machine-project"
 
 };
 
 
+// ==========================================
+// INITIALIZE FIREBASE
+// ==========================================
+
 firebase.initializeApp(firebaseConfig);
+
+
+// ==========================================
+// FIREBASE AUTHENTICATION
+// ==========================================
+
+var auth = firebase.auth();
+
+
+// ==========================================
+// FIREBASE DATABASE
+// ==========================================
+
+var database = firebase.database();
 
 
 // ==========================================
@@ -211,7 +237,7 @@ function openDocumentation(id) {
 function updateStatus(upsId, elementId) {
 
   var ref =
-    firebase.database().ref(
+    database.ref(
       upsId + "/Latest"
     );
 
@@ -279,19 +305,90 @@ function updateStatus(upsId, elementId) {
 
     }
 
+  }, function(error) {
+
+    console.error(
+      "Firebase read error:",
+      error
+    );
+
+
+    el = document.getElementById(elementId);
+
+    el.innerText =
+      "DATABASE ERROR";
+
+    el.className =
+      "status fault";
+
   });
 
 }
 
 
 // ==========================================
-// START UPS STATUS MONITORING
+// AUTHENTICATION CHECK
 // ==========================================
 
-updateStatus(
-  "UPS1",
-  "status_ups1"
-);
+auth.onAuthStateChanged(function(user) {
+
+  console.log(
+    "Authentication state:",
+    user ? user.email : "Not authenticated"
+  );
+
+
+  // ========================================
+  // USER NOT LOGGED IN
+  // ========================================
+
+  if (!user) {
+
+    document.getElementById(
+      "status_ups1"
+    ).innerText =
+      "LOGIN REQUIRED";
+
+
+    document.getElementById(
+      "status_ups1"
+    ).className =
+      "status fault";
+
+
+    setTimeout(function() {
+
+      window.location.href =
+        "gateway.html?id=UPS001";
+
+    }, 500);
+
+
+    return;
+
+  }
+
+
+  // ========================================
+  // USER AUTHENTICATED
+  // ========================================
+
+  console.log(
+    "Authenticated user:",
+    user.email
+  );
+
+
+  // ========================================
+  // NOW READ FIREBASE DATABASE
+  // ========================================
+
+  updateStatus(
+    "UPS1",
+    "status_ups1"
+  );
+
+});
 
 
 </script>
