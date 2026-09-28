@@ -178,7 +178,7 @@
     <div id="lastService"
          class="date loading">
 
-      Loading...
+      Checking authentication...
 
     </div>
 
@@ -196,7 +196,7 @@
     <div id="nextService"
          class="date loading">
 
-      Loading...
+      Checking authentication...
 
     </div>
 
@@ -218,6 +218,8 @@
      ========================= -->
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
@@ -256,155 +258,244 @@ var firebaseConfig = {
   apiKey:
     "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
 
+  authDomain:
+    "qr-machine-project.firebaseapp.com",
+
   databaseURL:
-    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+    "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "qr-machine-project"
 
 };
 
+
+// ==========================================
+// INITIALIZE FIREBASE
+// ==========================================
 
 firebase.initializeApp(firebaseConfig);
 
 
 // ==========================================
-// FIREBASE MAINTENANCE REFERENCE
+// FIREBASE AUTHENTICATION
 // ==========================================
 
-var maintenanceRef =
-  firebase.database().ref(
-    upsId + "/Maintenance"
-  );
+var auth =
+  firebase.auth();
+
+
+// ==========================================
+// FIREBASE DATABASE
+// ==========================================
+
+var database =
+  firebase.database();
 
 
 // ==========================================
 // GET MAINTENANCE DATA
 // ==========================================
 
-maintenanceRef.once("value")
-
-  .then(function(snapshot) {
+function loadMaintenanceData() {
 
 
-    var data =
-      snapshot.val();
+  console.log(
+    "Loading maintenance data for:",
+    upsId
+  );
 
 
-    var lastService =
-      document.getElementById(
-        "lastService"
-      );
-
-
-    var nextService =
-      document.getElementById(
-        "nextService"
-      );
-
-
-    // ======================================
-    // DATA FOUND
-    // ======================================
-
-    if (data) {
-
-
-      // LAST SERVICE
-
-      if (
-        data.Last_Service !== undefined
-      ) {
-
-        lastService.innerText =
-          data.Last_Service;
-
-        lastService.className =
-          "date";
-
-      }
-
-      else {
-
-        lastService.innerText =
-          "Not available";
-
-        lastService.className =
-          "date error";
-
-      }
-
-
-      // NEXT SERVICE
-
-      if (
-        data.Next_Service !== undefined
-      ) {
-
-        nextService.innerText =
-          data.Next_Service;
-
-        nextService.className =
-          "date";
-
-      }
-
-      else {
-
-        nextService.innerText =
-          "Not available";
-
-        nextService.className =
-          "date error";
-
-      }
-
-    }
-
-
-    // ======================================
-    // NO DATA
-    // ======================================
-
-    else {
-
-      lastService.innerText =
-        "No data";
-
-      nextService.innerText =
-        "No data";
-
-      lastService.className =
-        "date error";
-
-      nextService.className =
-        "date error";
-
-    }
-
-  })
-
-
-  // ========================================
-  // FIREBASE ERROR
-  // ========================================
-
-  .catch(function(error) {
-
-
-    console.error(
-      "Firebase error:",
-      error
+  var maintenanceRef =
+    database.ref(
+      upsId + "/Maintenance"
     );
 
 
+  maintenanceRef.once("value")
+
+    .then(function(snapshot) {
+
+
+      console.log(
+        "Maintenance Firebase data:",
+        snapshot.val()
+      );
+
+
+      var data =
+        snapshot.val();
+
+
+      var lastService =
+        document.getElementById(
+          "lastService"
+        );
+
+
+      var nextService =
+        document.getElementById(
+          "nextService"
+        );
+
+
+      // ======================================
+      // DATA FOUND
+      // ======================================
+
+      if (data) {
+
+
+        // ====================================
+        // LAST SERVICE
+        // ====================================
+
+        if (
+          data.Last_Service !== undefined
+        ) {
+
+          lastService.innerText =
+            data.Last_Service;
+
+          lastService.className =
+            "date";
+
+        }
+
+        else {
+
+          lastService.innerText =
+            "Not available";
+
+          lastService.className =
+            "date error";
+
+        }
+
+
+        // ====================================
+        // NEXT SERVICE
+        // ====================================
+
+        if (
+          data.Next_Service !== undefined
+        ) {
+
+          nextService.innerText =
+            data.Next_Service;
+
+          nextService.className =
+            "date";
+
+        }
+
+        else {
+
+          nextService.innerText =
+            "Not available";
+
+          nextService.className =
+            "date error";
+
+        }
+
+      }
+
+
+      // ======================================
+      // NO DATA
+      // ======================================
+
+      else {
+
+        lastService.innerText =
+          "No data";
+
+        nextService.innerText =
+          "No data";
+
+        lastService.className =
+          "date error";
+
+        nextService.className =
+          "date error";
+
+      }
+
+    })
+
+
+    // ========================================
+    // FIREBASE ERROR
+    // ========================================
+
+    .catch(function(error) {
+
+
+      console.error(
+        "Firebase maintenance error:",
+        error
+      );
+
+
+      document.getElementById(
+        "lastService"
+      ).innerText =
+        "Firebase Error";
+
+
+      document.getElementById(
+        "nextService"
+      ).innerText =
+        "Firebase Error";
+
+
+      document.getElementById(
+        "lastService"
+      ).className =
+        "date error";
+
+
+      document.getElementById(
+        "nextService"
+      ).className =
+        "date error";
+
+    });
+
+}
+
+
+// ==========================================
+// AUTHENTICATION CHECK
+// ==========================================
+
+auth.onAuthStateChanged(function(user) {
+
+
+  console.log(
+    "Authentication state:",
+    user ? user.email : "Not authenticated"
+  );
+
+
+  // ========================================
+  // USER NOT LOGGED IN
+  // ========================================
+
+  if (!user) {
+
+
     document.getElementById(
       "lastService"
     ).innerText =
-      "Firebase Error";
+      "LOGIN REQUIRED";
 
 
     document.getElementById(
       "nextService"
     ).innerText =
-      "Firebase Error";
+      "LOGIN REQUIRED";
 
 
     document.getElementById(
@@ -418,7 +509,37 @@ maintenanceRef.once("value")
     ).className =
       "date error";
 
-  });
+
+    setTimeout(function() {
+
+      window.location.href =
+        "gateway.html?id=UPS001";
+
+    }, 500);
+
+
+    return;
+
+  }
+
+
+  // ========================================
+  // USER AUTHENTICATED
+  // ========================================
+
+  console.log(
+    "Authenticated user:",
+    user.email
+  );
+
+
+  // ========================================
+  // NOW READ FIREBASE
+  // ========================================
+
+  loadMaintenanceData();
+
+});
 
 
 // ==========================================
