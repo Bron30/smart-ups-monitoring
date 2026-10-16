@@ -1,27 +1,619 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart UPS User Manual</title>
-<style>
-body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;line-height:1.6}header{background:#020617;padding:28px;text-align:center}header h1{margin:0}.container{max-width:950px;margin:25px auto;padding:20px}.section{background:#1e293b;margin-bottom:20px;padding:22px;border-radius:12px}.section h2{color:#38bdf8;margin-top:0}.info{background:#334155;padding:15px;border-radius:8px;margin-top:12px}li{margin:7px 0}.warning{background:#451a03;border-left:4px solid #f59e0b;padding:15px;border-radius:8px}.back{text-align:center;margin:30px}button{padding:12px 25px;background:#2563eb;border:0;border-radius:8px;color:white;font-size:16px;cursor:pointer}button:hover{background:#1d4ed8}.flow{font-weight:bold;text-align:center;font-size:17px}.tag{display:inline-block;background:#334155;padding:5px 10px;border-radius:15px;margin:3px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Smart UPS User Manual</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    header {
+      background: #020617;
+      padding: 28px 18px;
+      text-align: center;
+      border-bottom: 1px solid #334155;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 34px);
+    }
+
+    header p {
+      color: #cbd5e1;
+      margin: 10px 0 0;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 25px 18px;
+    }
+
+    .section {
+      background: #1e293b;
+      margin-bottom: 20px;
+      padding: 22px;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .section h2 {
+      color: #38bdf8;
+      margin: 0 0 14px;
+      font-size: 21px;
+    }
+
+    .section h3 {
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .section p:first-of-type {
+      margin-top: 0;
+    }
+
+    .info {
+      background: #334155;
+      padding: 15px 18px;
+      border-radius: 8px;
+      margin-top: 14px;
+    }
+
+    li {
+      margin: 7px 0;
+      padding-left: 2px;
+    }
+
+    .warning {
+      background: #451a03;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+
+    .notice {
+      background: #172554;
+      border-left: 4px solid #60a5fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+
+    .flow {
+      font-weight: bold;
+      text-align: center;
+      font-size: 16px;
+      padding: 15px;
+      background: #0f172a;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #334155;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin: 3px;
+      font-size: 13px;
+    }
+
+    .back {
+      text-align: center;
+      padding: 10px 18px 35px;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: #2563eb;
+      border: 0;
+      border-radius: 8px;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #7dd3fc;
+      outline-offset: 3px;
+    }
+
+    .secondary-button {
+      background: #475569;
+    }
+
+    .secondary-button:hover {
+      background: #64748b;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #94a3b8;
+      font-size: 12px;
+      border-top: 1px solid #334155;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 16px 12px;
+      }
+
+      .section {
+        padding: 17px;
+      }
+
+      .section h2 {
+        font-size: 19px;
+      }
+
+      .flow {
+        font-size: 14px;
+      }
+
+      button {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header><h1>📖 Smart UPS User Manual</h1><p>QR-Enabled Intelligent UPS Monitoring & Maintenance System</p></header>
-<div class="container">
-<div class="section"><h2>1. System Overview</h2><p>The Smart UPS system combines a UPS power system, ESP32-based monitoring, electrical and thermal sensors, automatic load management, Firebase cloud storage and a QR-authenticated web dashboard.</p><div class="info"><strong>System functions:</strong><ul><li>Real-time battery condition monitoring</li><li>Per-load current and power monitoring</li><li>Battery State of Charge (SoC) estimation</li><li>Automatic priority-based load shedding</li><li>UPS status and operating-mode indication</li><li>Event recording</li><li>QR-based authenticated access to digital monitoring, maintenance and documentation</li></ul></div></div>
-<div class="section"><h2>2. System Architecture</h2><p class="flow">Battery / UPS → Sensors → ESP32 → Wi-Fi → Firebase → QR-Authenticated Web Dashboard</p><div class="info"><strong>Commercial concept:</strong> A commercial UPS installation may include rectifier, DC link, battery bank, inverter and static bypass. The physical student prototype is a scaled low-power demonstration and must not be treated as a mall-scale UPS.</div></div>
-<div class="section"><h2>3. Parameters Monitored</h2><ul><li><strong>Battery Voltage:</strong> measured battery voltage.</li><li><strong>Battery Current:</strong> battery charge/discharge current.</li><li><strong>Battery Temperature:</strong> measured battery/system temperature.</li><li><strong>Battery SoC:</strong> estimated state of charge; it is an estimate and is affected by load, temperature, battery age and operating condition.</li><li><strong>Total Load Power:</strong> estimated/ measured combined load power.</li><li><strong>Status:</strong> overall condition such as Healthy, Warning or Fault.</li><li><strong>Mode:</strong> operating state such as NORMAL, LOAD_SHEDDING, CHARGING, RECOVERY or FAULT.</li><li><strong>Timestamp:</strong> time associated with the latest telemetry record.</li></ul></div>
-<div class="section"><h2>4. Per-Load Monitoring</h2><p>The system can monitor four demonstration load channels.</p><div class="info"><ul><li><strong>CH1 – Critical:</strong> critical POS/networking type load; protected from ordinary SoC-based shedding.</li><li><strong>CH2 – Medium priority:</strong> emergency lighting type load.</li><li><strong>CH3 – Medium priority:</strong> motor/demo load; special attention is required for startup current.</li><li><strong>CH4 – Non-critical:</strong> demonstration lamp; first load to be shed during low-SoC operation.</li></ul></div></div>
-<div class="section"><h2>5. Automatic Load-Shedding Logic</h2><p>Load shedding is based on battery SoC and protection conditions. Thresholds are intentionally separated to provide hysteresis.</p><div class="info"><ul><li><strong>Below 60% SoC:</strong> CH4 is shed.</li><li><strong>Below 40% SoC:</strong> CH3 is shed.</li><li><strong>Below 25% SoC:</strong> CH2 is shed.</li><li><strong>CH1:</strong> retained during ordinary SoC-based shedding because it is classified as critical.</li><li>Overcurrent, severe temperature, sensor failure and battery-protection conditions can override normal load priorities.</li></ul></div><p><strong>Recovery:</strong> CH2 may restore at ≥35%, CH3 at ≥50% and CH4 at ≥70%, provided no fault condition exists.</p></div>
-<div class="section"><h2>6. Operating the Digital Dashboard</h2><ol><li>Scan the QR code attached to the UPS.</li><li>Open the displayed web address.</li><li>Sign in using an authorized account.</li><li>The gateway validates the UPS QR identifier and its active security status.</li><li>After successful authentication, open the dashboard.</li><li>View live SoC, battery voltage, load power, operating mode and UPS status.</li><li>Open UPS Monitoring for detailed telemetry and per-channel information.</li><li>Open Maintenance for service information and Documentation for the manual and troubleshooting guide.</li></ol></div>
-<div class="section"><h2>7. Events and Maintenance</h2><p>The system can record important events such as load-state changes, protection events, system initialization and other defined operating conditions. Maintenance information contains the last and next service dates configured for the UPS.</p></div>
-<div class="section"><h2>8. Network / Cloud Operation</h2><ul><li>The ESP32 performs local monitoring and protection logic.</li><li>Wi-Fi/Firebase is used for telemetry and dashboard visibility.</li><li>If Wi-Fi or Firebase becomes unavailable, local protection and load-control logic should continue to operate.</li><li>Cloud connectivity must not be treated as the primary safety mechanism.</li></ul></div>
-<div class="section"><h2>9. Safety Precautions</h2><div class="warning"><strong>Important:</strong> This is a prototype monitoring/control system. Never expose the ESP32, breadboard or low-voltage prototype wiring directly to hazardous mains voltage.</div><ul><li>Use correct battery protection, fusing, isolation and an appropriate enclosure.</li><li>Do not short-circuit lithium-ion cells or battery terminals.</li><li>Use only correctly matched cells and a suitable BMS/charger for the battery configuration.</li><li>Do not exceed UPS, inverter, relay, sensor or wiring ratings.</li><li>Never route high-current battery or 230 V AC wiring through a breadboard.</li><li>Use properly isolated AC voltage/current sensing.</li><li>Disconnect power before hardware modification or maintenance.</li><li>Do not bypass BMS or other protection devices.</li><li>For commercial/high-power UPS installations, use qualified electrical personnel and appropriate protection procedures.</li></ul></div>
-<div class="section"><h2>10. Recommended Demonstration Sequence</h2><ol><li>Start with normal operation and verify all sensor readings.</li><li>Demonstrate dashboard updates.</li><li>Reduce simulated/actual SoC within safe limits and demonstrate CH4 shedding.</li><li>Continue to the next thresholds to demonstrate CH3 and CH2 shedding.</li><li>Show that the critical CH1 remains enabled under ordinary SoC shedding.</li><li>Raise SoC and demonstrate staged recovery.</li><li>Review the generated events on the dashboard.</li></ol></div>
-<div class="section"><h2>11. Troubleshooting</h2><p>For common electrical, sensor, dashboard, Firebase, authentication and load-control problems, open the dedicated Troubleshooting Guide.</p></div>
-</div>
-<div class="back"><button onclick="history.back()">⬅ Back to Documentation</button></div>
-</body></html>
+
+  <header>
+    <h1 id="manualTitle">📖 Smart UPS User Manual</h1>
+    <p>
+      QR-Enabled Intelligent UPS Monitoring and Maintenance System
+    </p>
+  </header>
+
+  <main class="container">
+
+    <!-- 1. SYSTEM OVERVIEW -->
+    <section class="section">
+      <h2>1. System Overview</h2>
+
+      <p>
+        The Smart UPS project demonstrates a DC power monitoring and
+        load-management system using an ESP32, sensors, Firebase cloud
+        storage and a QR-authenticated web dashboard.
+      </p>
+
+      <div class="info">
+        <strong>System objectives:</strong>
+        <ul>
+          <li>Monitor battery voltage, current and temperature when suitable sensors are connected.</li>
+          <li>Display battery State of Charge (SoC) and overall UPS status.</li>
+          <li>Monitor current and power for individual DC load channels.</li>
+          <li>Support priority-based load shedding and recovery through suitable firmware and switching hardware.</li>
+          <li>Display system events and operating information.</li>
+          <li>Provide QR-based authenticated access to monitoring, maintenance and documentation pages.</li>
+        </ul>
+      </div>
+
+      <div class="notice">
+        <strong>Implementation status:</strong>
+        The website and Firebase dashboard currently display configured
+        database values. Do not treat those values as live sensor
+        measurements or actual load-switch states until the ESP32,
+        sensors and switching hardware are connected and verified.
+      </div>
+    </section>
+
+    <!-- 2. SYSTEM ARCHITECTURE -->
+    <section class="section">
+      <h2>2. System Architecture</h2>
+
+      <p class="flow">
+        DC Battery → Sensors → ESP32 → Wi-Fi → Firebase →
+        QR-Authenticated Web Dashboard
+      </p>
+
+      <div class="info">
+        <strong>Prototype scope:</strong>
+        <ul>
+          <li>The current project focuses on a low-voltage DC UPS prototype.</li>
+          <li>The ESP32 is intended to collect sensor readings and execute local control logic.</li>
+          <li>Firebase stores monitoring data for remote dashboard access.</li>
+          <li>The web dashboard displays telemetry, load channels, events and documentation.</li>
+        </ul>
+      </div>
+
+      <div class="warning">
+        A commercial UPS may contain a rectifier, battery bank, inverter,
+        DC link and bypass circuitry. These commercial features must not
+        be assumed to exist in this DC-only student prototype.
+      </div>
+    </section>
+
+    <!-- 3. PARAMETERS MONITORED -->
+    <section class="section">
+      <h2>3. Parameters Monitored</h2>
+
+      <ul>
+        <li>
+          <strong>Battery Voltage:</strong>
+          DC voltage measured across the battery using a suitably rated
+          voltage-sensing circuit.
+        </li>
+
+        <li>
+          <strong>Battery Current:</strong>
+          Battery charge or discharge current measured using an appropriate
+          current sensor.
+        </li>
+
+        <li>
+          <strong>Battery Temperature:</strong>
+          Temperature measured by the installed temperature sensor.
+        </li>
+
+        <li>
+          <strong>Battery SoC:</strong>
+          Estimated remaining battery charge, expressed as a percentage.
+          Its accuracy depends on the estimation method, battery condition
+          and measurement quality.
+        </li>
+
+        <li>
+          <strong>Total DC Load:</strong>
+          Combined load power, calculated from measured values or supplied
+          as configured demonstration data.
+        </li>
+
+        <li>
+          <strong>Individual Load Current:</strong>
+          Current associated with each configured DC output channel.
+        </li>
+
+        <li>
+          <strong>UPS Status:</strong>
+          A status such as Healthy, Warning or Fault, according to the
+          implemented monitoring logic.
+        </li>
+
+        <li>
+          <strong>Operating Mode:</strong>
+          An optional firmware-defined mode such as NORMAL,
+          LOAD_SHEDDING, CHARGING, RECOVERY or FAULT.
+        </li>
+
+        <li>
+          <strong>Timestamp:</strong>
+          The recorded time associated with a telemetry update or event.
+        </li>
+      </ul>
+
+      <div class="notice">
+        A displayed value is only as reliable as its sensor, calibration,
+        firmware and database update process. A blank operating mode means
+        that a corresponding value may not have been configured in Firebase.
+      </div>
+    </section>
+
+    <!-- 4. PER-LOAD MONITORING -->
+    <section class="section">
+      <h2>4. Per-Load Monitoring</h2>
+
+      <p>
+        The dashboard is configured for four demonstration DC load channels.
+        Their labels and priority assignments should match the actual
+        hardware and firmware configuration.
+      </p>
+
+      <div class="info">
+        <ul>
+          <li>
+            <strong>CH1 — Critical load:</strong>
+            Intended for a critical demonstration load, such as a small
+            networking or POS-type DC load. It is retained during ordinary
+            SoC-based load shedding.
+          </li>
+
+          <li>
+            <strong>CH2 — Medium priority:</strong>
+            Intended for a demonstration load such as emergency lighting.
+          </li>
+
+          <li>
+            <strong>CH3 — Medium priority:</strong>
+            Intended for a DC motor or other demonstration load. Motor
+            startup current must be considered when selecting the driver
+            and current sensor.
+          </li>
+
+          <li>
+            <strong>CH4 — Non-critical load:</strong>
+            Intended for a demonstration lamp and is the first channel
+            scheduled for SoC-based shedding.
+          </li>
+        </ul>
+      </div>
+
+      <p>
+        The Firebase channel records use the fields
+        <span class="tag">Name</span>
+        <span class="tag">Current</span>
+        <span class="tag">Power</span>
+        <span class="tag">Relay</span>
+      </p>
+
+      <div class="warning">
+        The Relay field in Firebase is a displayed data value. It does not
+        prove that a physical relay or MOSFET channel has switched.
+        Confirm switching at the hardware before describing the channel
+        as physically ON or OFF.
+      </div>
+    </section>
+
+    <!-- 5. LOAD SHEDDING -->
+    <section class="section">
+      <h2>5. Automatic Load-Shedding Logic</h2>
+
+      <p>
+        The proposed control strategy sheds lower-priority loads as
+        battery SoC decreases. Separate shedding and restoration thresholds
+        provide hysteresis to reduce repeated switching near a threshold.
+      </p>
+
+      <div class="info">
+        <ul>
+          <li><strong>SoC below 60%:</strong> Shed CH4.</li>
+          <li><strong>SoC below 40%:</strong> Shed CH3 as well.</li>
+          <li><strong>SoC below 25%:</strong> Shed CH2 as well.</li>
+          <li><strong>CH1:</strong> Retain during ordinary SoC-based shedding.</li>
+          <li><strong>Protection override:</strong> A serious electrical fault or battery-protection condition may require shutting down affected channels, including a normally critical channel.</li>
+        </ul>
+      </div>
+
+      <h3>Restoration thresholds</h3>
+
+      <div class="info">
+        <ul>
+          <li>CH2 may be restored at SoC ≥ 35%.</li>
+          <li>CH3 may be restored at SoC ≥ 50%.</li>
+          <li>CH4 may be restored at SoC ≥ 70%.</li>
+        </ul>
+      </div>
+
+      <div class="notice">
+        These are the proposed project thresholds. Automatic shedding and
+        recovery occur only when the corresponding ESP32 firmware and
+        physical switching stage have been implemented and tested.
+        The website alone does not perform hardware load shedding.
+      </div>
+    </section>
+
+    <!-- 6. DASHBOARD OPERATION -->
+    <section class="section">
+      <h2>6. Operating the Digital Dashboard</h2>
+
+      <ol>
+        <li>Scan the QR code assigned to the UPS.</li>
+        <li>Open the URL encoded in the QR code.</li>
+        <li>Enter an authorized Firebase Email/Password account.</li>
+        <li>The gateway authenticates the account and checks the QR ID against the configured security record.</li>
+        <li>If the QR record is active and the access log is written successfully, the gateway redirects to the requested page.</li>
+        <li>Open the main dashboard to review the configured UPS overview.</li>
+        <li>Open UPS Monitoring to view detailed telemetry, load channels and events.</li>
+        <li>Open Maintenance to review the configured maintenance information.</li>
+        <li>Open Documentation to access this manual and the troubleshooting guide.</li>
+      </ol>
+
+      <div class="info">
+        <strong>Authentication reminder:</strong>
+        Only authorized accounts should be used. Access requires both a
+        successful sign-in and an active matching QR record.
+      </div>
+    </section>
+
+    <!-- 7. EVENTS AND MAINTENANCE -->
+    <section class="section">
+      <h2>7. Events and Maintenance</h2>
+
+      <p>
+        The event history can be used to record configured system
+        activities, including initialization, load-state changes and
+        protection events.
+      </p>
+
+      <p>
+        The Maintenance page can display service information such as
+        the previous service date, next service date and maintenance notes
+        when those fields are configured in Firebase.
+      </p>
+
+      <div class="notice">
+        Event history and maintenance dates should reflect actual recorded
+        operations or clearly identified demonstration data. Do not assume
+        that an event proves a physical load changed state unless the
+        hardware state has been verified.
+      </div>
+    </section>
+
+    <!-- 8. NETWORK AND CLOUD -->
+    <section class="section">
+      <h2>8. Network and Cloud Operation</h2>
+
+      <ul>
+        <li>The ESP32 is intended to perform local sensor monitoring and control.</li>
+        <li>Wi-Fi provides connectivity to Firebase when a network is available.</li>
+        <li>The website reads configured Firebase values for remote display.</li>
+        <li>Loss of Wi-Fi or Firebase connectivity should not disable essential local protection.</li>
+        <li>Local load-control decisions should not depend exclusively on cloud availability.</li>
+        <li>Database rules should restrict unauthorized access and prevent ordinary dashboard users from changing protected telemetry.</li>
+      </ul>
+
+      <div class="warning">
+        Local operation during network failure must be implemented and
+        tested in the ESP32 firmware. A cloud dashboard by itself cannot
+        guarantee offline monitoring or protection.
+      </div>
+    </section>
+
+    <!-- 9. SAFETY -->
+    <section class="section">
+      <h2>9. Safety Precautions</h2>
+
+      <div class="warning">
+        <strong>Important:</strong>
+        This project is a low-voltage DC prototype. Never connect
+        breadboard wiring, ESP32 GPIO pins or non-isolated prototype
+        circuits directly to hazardous mains voltage.
+      </div>
+
+      <ul>
+        <li>Use a suitable Battery Management System (BMS), charger and battery protection for the selected battery chemistry and configuration.</li>
+        <li>Use compatible, properly matched cells and inspect them for damage.</li>
+        <li>Fit appropriate fuses close to the battery source and use wiring rated for the expected current.</li>
+        <li>Observe correct polarity and avoid short-circuiting battery terminals.</li>
+        <li>Do not exceed the ratings of the battery, sensors, switching devices, connectors or wiring.</li>
+        <li>Account for DC motor startup and stall current when choosing drivers and protection.</li>
+        <li>Disconnect the battery and other power sources before modifying the hardware.</li>
+        <li>Never bypass the BMS or other protective devices.</li>
+        <li>Use appropriate isolation and qualified personnel for any future mains-voltage integration.</li>
+      </ul>
+    </section>
+
+    <!-- 10. DEMONSTRATION -->
+    <section class="section">
+      <h2>10. Recommended Demonstration Sequence</h2>
+
+      <ol>
+        <li>Inspect the low-voltage DC hardware, battery protection and wiring before applying power.</li>
+        <li>Verify each sensor reading against a suitable reference instrument.</li>
+        <li>Confirm that the dashboard displays the expected telemetry.</li>
+        <li>Demonstrate the four configured load channels and verify physical switching if the hardware is installed.</li>
+        <li>Test CH4 shedding at the configured threshold under controlled conditions.</li>
+        <li>Test CH3 and CH2 shedding at their respective thresholds.</li>
+        <li>Confirm CH1 remains enabled during ordinary SoC-based shedding, while protection logic can override normal priorities.</li>
+        <li>Raise SoC or use a safe test procedure to demonstrate staged restoration.</li>
+        <li>Verify that events correspond to actual state changes.</li>
+        <li>Demonstrate QR authentication and denial when the QR record is revoked or invalid.</li>
+      </ol>
+
+      <div class="warning">
+        Do not deliberately over-discharge, overheat or short-circuit a
+        lithium-ion battery to demonstrate protection. Use a safe test
+        method and suitable test equipment.
+      </div>
+    </section>
+
+    <!-- 11. TROUBLESHOOTING -->
+    <section class="section">
+      <h2>11. Troubleshooting</h2>
+
+      <p>
+        Use the dedicated Troubleshooting Guide for common issues involving
+        sensor readings, Firebase connectivity, authentication, dashboard
+        updates and load-control behaviour.
+      </p>
+
+      <div class="info">
+        <strong>Before troubleshooting:</strong>
+        <ul>
+          <li>Check the power supply and wiring.</li>
+          <li>Confirm that the relevant sensor and firmware are configured.</li>
+          <li>Verify that the expected Firebase path and field names exist.</li>
+          <li>Check browser developer-console errors if the dashboard fails to load.</li>
+          <li>Never weaken Firebase security rules merely to hide a permission error.</li>
+        </ul>
+      </div>
+
+      <button type="button" onclick="openTroubleshooting()">
+        🔧 Open Troubleshooting Guide
+      </button>
+    </section>
+
+  </main>
+
+  <div class="back">
+    <button
+      type="button"
+      class="secondary-button"
+      onclick="goBack()"
+    >
+      ⬅ Back to Documentation
+    </button>
+
+    <button
+      type="button"
+      onclick="goDashboard()"
+    >
+      🏠 Main Dashboard
+    </button>
+  </div>
+
+  <footer>
+    Smart UPS Monitoring and Maintenance System
+    <br>
+    DC prototype documentation
+  </footer>
+
+  <script>
+    // ==========================================
+    // READ UPS ID FROM URL
+    // ==========================================
+
+    const params = new URLSearchParams(
+      window.location.search
+    );
+
+    const requestedId = params.get("id") || "UPS1";
+
+    // Validate the ID format before using it in navigation.
+    const upsId = /^UPS[0-9]+$/i.test(requestedId)
+      ? requestedId.toUpperCase()
+      : "UPS1";
+
+    document.getElementById("manualTitle").textContent =
+      "📖 " + upsId + " User Manual";
+
+
+    // ==========================================
+    // NAVIGATION
+    // ==========================================
+
+    function openTroubleshooting() {
+      window.location.href =
+        "troubleshooting.html?id=" +
+        encodeURIComponent(upsId);
+    }
+
+    function goBack() {
+      window.location.href =
+        "documentation.html?id=" +
+        encodeURIComponent(upsId);
+    }
+
+    function goDashboard() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
