@@ -1,45 +1,290 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart UPS Dashboard</title>
+
 <style>
-*{box-sizing:border-box}body{font-family:Arial,sans-serif;background:#0f172a;color:#f8fafc;margin:0}.header{background:#020617;padding:22px;text-align:center}.header h1{margin:0;font-size:28px}.subtitle{color:#94a3b8;margin-top:7px}.container{max-width:1100px;margin:auto;padding:20px}.overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:24px}.card{background:#1e293b;padding:18px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.25)}.metric{text-align:center}.metric h3{font-size:14px;color:#cbd5e1;margin:0}.value{font-size:25px;font-weight:bold;margin-top:9px}.unit{font-size:12px;color:#94a3b8}.status{display:inline-block;padding:8px 16px;border-radius:18px;font-weight:bold;margin-top:8px}.healthy{background:#16a34a}.warning{background:#eab308;color:#111827}.fault{background:#dc2626}.navgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}.navcard{cursor:pointer;text-align:center;transition:.2s}.navcard:hover{transform:translateY(-3px);background:#334155}.navcard h2{margin:5px 0 10px;font-size:20px}.navcard p{color:#94a3b8;font-size:14px}.bar{height:9px;background:#334155;border-radius:10px;overflow:hidden;margin-top:10px}.barfill{height:100%;width:0;background:#22c55e;transition:width .4s}.error{display:none;background:#450a0a;color:#fecaca;padding:12px;border-radius:8px;margin-bottom:18px}.footer{text-align:center;color:#64748b;font-size:12px;margin:25px 0}.live{color:#22c55e;font-size:13px}@media(max-width:500px){.header h1{font-size:23px}.container{padding:14px}}
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#0f172a;color:#f8fafc;margin:0}
+.header{background:#020617;padding:22px;text-align:center}
+.header h1{margin:0;font-size:28px}
+.subtitle{color:#94a3b8;margin-top:7px}
+.container{max-width:1100px;margin:auto;padding:20px}
+.overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:24px}
+.card{background:#1e293b;padding:18px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.25);min-width:0}
+.metric{text-align:center}
+.metric h3{font-size:14px;color:#cbd5e1;margin:0}
+.value{font-size:25px;font-weight:bold;margin-top:9px;overflow-wrap:anywhere}
+.unit{font-size:12px;color:#94a3b8}
+.status{display:inline-block;padding:8px 16px;border-radius:18px;font-weight:bold;margin-top:8px}
+.healthy{background:#16a34a;color:#fff}
+.warning{background:#eab308;color:#111827}
+.fault{background:#dc2626;color:#fff}
+.mode{color:#38bdf8}
+.navgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.navcard{cursor:pointer;transition:transform .2s,background .2s}
+.navcard:hover{transform:translateY(-3px);background:#334155}
+.navcard:focus-visible{outline:2px solid #60a5fa;outline-offset:3px}
+.navcard h2{margin:5px 0 10px;font-size:20px;text-align:center}
+.navcard p{color:#94a3b8;font-size:14px;line-height:1.5;text-align:center}
+.nav-action{text-align:center}
+.bar{height:9px;background:#334155;border-radius:10px;overflow:hidden;margin-top:10px}
+.barfill{height:100%;width:0;background:#22c55e;transition:width .4s}
+.error{display:none;background:#450a0a;color:#fecaca;padding:12px;border-radius:8px;margin-bottom:18px;overflow-wrap:anywhere}
+.footer{text-align:center;color:#94a3b8;font-size:12px;line-height:1.6;margin:25px 0}
+.live{color:#22c55e;font-size:13px}
+.section-title{font-size:19px;margin:24px 0 12px}
+.info{background:#172033;color:#cbd5e1;padding:12px;border-radius:8px;font-size:13px;line-height:1.5;margin-top:18px}
+@media(max-width:500px){
+  .header h1{font-size:23px}
+  .container{padding:14px}
+  .overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{padding:14px}
+  .value{font-size:21px}
+}
 </style>
 </head>
+
 <body>
-<div class="header"><h1>🔋 Smart UPS Dashboard</h1><div class="subtitle">UPS1 • QR-Authenticated Monitoring</div><div class="live">● LIVE</div></div>
+<div class="header">
+  <h1>🔋 Smart UPS Dashboard</h1>
+  <div class="subtitle">UPS1 • QR-Authenticated Monitoring</div>
+  <div class="live" id="connectionState">● CONNECTING</div>
+</div>
+
 <div class="container">
-<div id="errorBox" class="error"></div>
-<div class="overview">
-<div class="card metric"><h3>UPS STATUS</h3><div id="status" class="status">--</div></div>
-<div class="card metric"><h3>BATTERY SoC</h3><div id="soc" class="value">--</div><div class="unit">Estimated</div><div class="bar"><div id="socBar" class="barfill"></div></div></div>
-<div class="card metric"><h3>BATTERY VOLTAGE</h3><div id="voltage" class="value">--</div><div class="unit">V</div></div>
-<div class="card metric"><h3>TOTAL LOAD</h3><div id="load" class="value">--</div><div class="unit">W</div></div>
-<div class="card metric"><h3>OPERATING MODE</h3><div id="mode" class="value">--</div></div>
+  <div id="errorBox" class="error" role="alert"></div>
+
+  <div class="section-title">System Overview</div>
+
+  <div class="overview">
+    <div class="card metric">
+      <h3>UPS STATUS</h3>
+      <div id="status" class="status">--</div>
+    </div>
+
+    <div class="card metric">
+      <h3>BATTERY SoC</h3>
+      <div id="soc" class="value">--</div>
+      <div class="unit">Estimated</div>
+      <div class="bar"><div id="socBar" class="barfill"></div></div>
+    </div>
+
+    <div class="card metric">
+      <h3>BATTERY VOLTAGE</h3>
+      <div id="voltage" class="value">--</div>
+      <div class="unit">V</div>
+    </div>
+
+    <div class="card metric">
+      <h3>TOTAL DC LOAD</h3>
+      <div id="load" class="value">--</div>
+      <div class="unit">W</div>
+    </div>
+
+    <div class="card metric">
+      <h3>OPERATING MODE</h3>
+      <div id="mode" class="value mode">--</div>
+    </div>
+  </div>
+
+  <div class="section-title">UPS Management</div>
+
+  <div class="navgrid">
+    <div class="card navcard" role="link" tabindex="0"
+         onclick="openUPS('UPS1')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openUPS('UPS1')}">
+      <h2>🔋 UPS Monitoring</h2>
+      <p>Battery voltage, state of charge, four DC load channels, events and system parameters.</p>
+      <div class="nav-action"><span class="status healthy">OPEN DASHBOARD →</span></div>
+    </div>
+
+    <div class="card navcard" role="link" tabindex="0"
+         onclick="openMaintenance('UPS1')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMaintenance('UPS1')}">
+      <h2>🔧 Maintenance</h2>
+      <p>View service information, maintenance records and scheduled checks.</p>
+      <div class="nav-action"><span class="status healthy">VIEW MAINTENANCE →</span></div>
+    </div>
+
+    <div class="card navcard" role="link" tabindex="0"
+         onclick="openDocumentation('UPS1')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDocumentation('UPS1')}">
+      <h2>📚 Documentation</h2>
+      <p>Access the UPS manual and troubleshooting documentation.</p>
+      <div class="nav-action"><span class="status healthy">VIEW DOCUMENTS →</span></div>
+    </div>
+  </div>
+
+  <div class="info">
+    Dashboard values are read from Firebase. Until physical sensors are
+    connected, values are sample data rather than live measurements.
+    Relay states represent the values stored in Firebase and do not confirm
+    physical switching.
+  </div>
+
+  <div class="footer">
+    Secure access is controlled through Firebase Authentication and QR validation.<br>
+    DC monitoring prototype • Four load channels
+  </div>
 </div>
-<div class="navgrid">
-<div class="card navcard" onclick="openUPS('UPS1')"><h2>🔋 UPS Monitoring</h2><p>Battery, load channels, events and live parameters.</p><div id="upsStatus" class="status healthy">OPEN DASHBOARD</div></div>
-<div class="card navcard" onclick="openMaintenance('UPS1')"><h2>🔧 Maintenance</h2><p>Service dates and maintenance information.</p><div class="status healthy">VIEW MAINTENANCE</div></div>
-<div class="card navcard" onclick="openDocumentation('UPS1')"><h2>📚 Documentation</h2><p>Manual and troubleshooting documentation.</p><div class="status healthy">VIEW DOCUMENTS</div></div>
-</div>
-<div class="footer">Secure access is controlled through Firebase Authentication and QR validation.</div>
-</div>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 <script>
-const firebaseConfig={apiKey:"AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",authDomain:"qr-machine-project.firebaseapp.com",databaseURL:"https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"qr-machine-project"};
-if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();const database=firebase.database();
-function openUPS(id){window.location.href="UPS.html?id="+encodeURIComponent(id)}
-function openMaintenance(id){window.location.href="maintenance.html?id="+encodeURIComponent(id)}
-function openDocumentation(id){window.location.href="documentation.html?id="+encodeURIComponent(id)}
-function showError(msg){console.error(msg);const e=document.getElementById("errorBox");e.innerText=msg;e.style.display="block"}
-function updateStatus(s){const e=document.getElementById("status");if(s===undefined||s===null){e.innerText="NO DATA";e.className="status fault";return}const t=String(s),l=t.toLowerCase();e.innerText=t.toUpperCase();e.className="status "+(l==="healthy"||l==="normal"?"healthy":l==="warning"?"warning":"fault")}
-function loadDashboard(){database.ref("UPS1/Latest").on("value",snap=>{const d=snap.val();if(!d){showError("No UPS data found in Firebase.");return}document.getElementById("soc").innerText=d.Battery_SoC!==undefined?d.Battery_SoC+" %":"--";const soc=Number(d.Battery_SoC);document.getElementById("socBar").style.width=Math.max(0,Math.min(100,isNaN(soc)?0:soc))+"%";document.getElementById("voltage").innerText=d.Battery_Voltage!==undefined?Number(d.Battery_Voltage).toFixed(2):"--";document.getElementById("load").innerText=d.Total_Load_W!==undefined?Number(d.Total_Load_W).toFixed(1):"--";document.getElementById("mode").innerText=d.Mode!==undefined?String(d.Mode).toUpperCase():"--";updateStatus(d.Status);document.getElementById("errorBox").style.display="none"},err=>showError("Firebase read failed: "+err.message))}
-auth.onAuthStateChanged(user=>{if(!user){document.getElementById("status").innerText="LOGIN REQUIRED";document.getElementById("status").className="status fault";setTimeout(()=>window.location.href="gateway.html?id=UPS001",500);return}loadDashboard()});
+const firebaseConfig = {
+  apiKey: "AIzaSyAtUjNOxehowo3hBGQZ2Ln3-XgG7-LFTFo",
+  authDomain: "qr-machine-project.firebaseapp.com",
+  databaseURL: "https://qr-machine-project-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "qr-machine-project"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+const database = firebase.database();
+
+function openUPS(id) {
+  window.location.href = "UPS.html?id=" + encodeURIComponent(id);
+}
+
+function openMaintenance(id) {
+  window.location.href = "maintenance.html?id=" + encodeURIComponent(id);
+}
+
+function openDocumentation(id) {
+  window.location.href = "documentation.html?id=" + encodeURIComponent(id);
+}
+
+function showError(message) {
+  console.error(message);
+  const element = document.getElementById("errorBox");
+  element.textContent = message;
+  element.style.display = "block";
+}
+
+function setConnectionState(message) {
+  document.getElementById("connectionState").textContent = message;
+}
+
+function getValue(data, keys) {
+  for (const key of keys) {
+    if (data[key] !== undefined && data[key] !== null) {
+      return data[key];
+    }
+  }
+  return undefined;
+}
+
+function formatNumber(value, decimals, suffix = "") {
+  if (value === undefined || value === null || value === "") {
+    return "--";
+  }
+
+  const number = Number(value);
+
+  return Number.isFinite(number)
+    ? number.toFixed(decimals) + suffix
+    : "--";
+}
+
+function updateStatus(value) {
+  const element = document.getElementById("status");
+
+  if (value === undefined || value === null || value === "") {
+    element.textContent = "NO DATA";
+    element.className = "status fault";
+    return;
+  }
+
+  const status = String(value);
+  const normalized = status.toLowerCase();
+
+  element.textContent = status.toUpperCase();
+  element.className = "status";
+
+  if (normalized === "healthy" || normalized === "normal") {
+    element.classList.add("healthy");
+  } else if (normalized === "warning") {
+    element.classList.add("warning");
+  } else {
+    element.classList.add("fault");
+  }
+}
+
+function loadDashboard() {
+  database.ref("UPS1/Latest").on("value", snapshot => {
+    const data = snapshot.val();
+
+    if (!data) {
+      showError("No UPS data found at UPS1/Latest.");
+      setConnectionState("● NO DATA");
+      return;
+    }
+
+    // Existing Firebase fields first; newer names are supported as fallbacks.
+    const soc = getValue(data, ["Soc", "Battery_SoC"]);
+    const voltage = getValue(data, ["Voltage", "Battery_Voltage"]);
+    const totalLoad = getValue(data, ["Total_Load", "Total_Load_W"]);
+    const mode = getValue(data, ["Mode"]);
+
+    document.getElementById("soc").textContent =
+      soc !== undefined ? formatNumber(soc, 0, " %") : "--";
+
+    const socNumber = Number(soc);
+    const validSoc = soc !== undefined && Number.isFinite(socNumber);
+
+    document.getElementById("socBar").style.width =
+      validSoc ? Math.max(0, Math.min(100, socNumber)) + "%" : "0%";
+
+    document.getElementById("voltage").textContent =
+      formatNumber(voltage, 2);
+
+    document.getElementById("load").textContent =
+      formatNumber(totalLoad, 1);
+
+    document.getElementById("mode").textContent =
+      mode !== undefined ? String(mode).toUpperCase() : "--";
+
+    updateStatus(data.Status);
+
+    document.getElementById("errorBox").style.display = "none";
+    setConnectionState("● CONNECTED");
+  }, error => {
+    showError("Firebase read failed: " + error.message);
+    setConnectionState("● CONNECTION ERROR");
+  });
+}
+
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    document.getElementById("status").textContent = "LOGIN REQUIRED";
+    document.getElementById("status").className = "status fault";
+    setConnectionState("● AUTHENTICATION REQUIRED");
+
+    // Keep the existing gateway login flow.
+    setTimeout(() => {
+      if (!auth.currentUser) {
+        window.location.href = "gateway.html?id=UPS001";
+      }
+    }, 500);
+
+    return;
+  }
+
+  setConnectionState("● AUTHENTICATED");
+  loadDashboard();
+}, error => {
+  showError("Authentication error: " + error.message);
+  setConnectionState("● AUTHENTICATION ERROR");
+});
 </script>
 </body>
 </html>
